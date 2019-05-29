@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import { View, Text,Image,StyleSheet,TextInput,Button,TouchableOpacity } from 'react-native';
-import icon from '../assets/Logo.png';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+import icon from '../../assets/Logo.png'; 
+import {KeyboardAvoidingView} from 'react-native';
 
 export default class Login extends Component {
   constructor(props) {
-    super(props);
-    this.state = {
-    };
+    super(props)
   }
+  static navigationOptions = {
+    header:null
+  };
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Text style={styles.text}> Testigo </Text>
         <Image source={icon} style={styles.img}/> 
         <TextInput placeholder="Ingrese su RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput}/>
@@ -19,10 +24,10 @@ export default class Login extends Component {
         <TouchableOpacity style={styles.button}>
             <Text style={{color: "#fff",fontSize:15}}>Iniciar Sesión</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{marginTop:10}}>
+        <TouchableOpacity style={{marginTop:10}} onPress={()=>{navigate("SignUp")}}>  
             <Text style={{color: "#00B4DB",fontSize:15}}>Registrarse</Text>
         </TouchableOpacity>
-        
+        </KeyboardAvoidingView>
       </View>
     );
   }
