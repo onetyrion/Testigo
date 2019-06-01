@@ -1,17 +1,16 @@
 import React from "react"; 
-import { StyleSheet,Platform, Text, View, Image } from "react-native"; 
+import { StyleSheet,ActivityIndicator, Text, View, Image } from "react-native"; 
 import { Constants, Location, Permissions,MapView,Marker  } from "expo"; 
 
 export default class Home extends React.Component { 
     constructor(props) {
         super(props);
-    
         this.state = {
             lat: null,
             long: null,
             latitudeDelta: 0.009,
             longitudeDelta: 0.009,
-            error:null,
+            isready:false,
         };
     }
     componentWillMount(){
@@ -27,10 +26,13 @@ export default class Home extends React.Component {
             console.log(error)
         }
     }
+    componentDidMount(){
+        this.setState({isready:true})
+    }
     render() { 
         console.log("Latitude: "+this.state.lat+"\n Longitude: "+this.state.long+"\n LatDelta: "+this.state.latitudeDelta+"\n LongDelta: "+this.state.longitudeDelta);
         return (
-            this.state.lat  ?
+            this.state.lat && this.state.isready  ?
             <View style={styles.container}>
                 <MapView
                 showsUserLocation={true} followUserLocation={true}
@@ -44,7 +46,7 @@ export default class Home extends React.Component {
                 />
             </View>
              
-            : null
+            : <View style={styles.container}><ActivityIndicator size="large" color="#dc3545" /></View>
         ); 
     } 
 }

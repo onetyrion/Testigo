@@ -6,6 +6,7 @@ import Home from './Components/Auth/Home';
 
 // versión expo 2.18.4
 export default class App extends React.Component {
+
   render() {
     return (
       <RoutesNoAuth/> 

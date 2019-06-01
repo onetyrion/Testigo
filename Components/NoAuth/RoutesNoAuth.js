@@ -9,6 +9,10 @@ const routesNoAuths = createStackNavigator({
     SignIn:{screen:Login,},
     SignUp:{screen:Register,},
     TyC:{screen:TyC,},
-    RoutesAuth:{screen:RoutesAuth,}
-},{defaultNavigationOptions:{header:null}});
+    RoutesAuth:{screen:RoutesAuth,
+        navigationOptions:{ 
+        title: 'SignIn',
+        header:null 
+        },}
+});
 export default createAppContainer(routesNoAuths);
