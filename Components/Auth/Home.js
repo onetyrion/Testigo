@@ -1,7 +1,8 @@
 import React from "react"; 
 import { StyleSheet,ActivityIndicator, Text, View, Image } from "react-native"; 
 import { Constants, Location, Permissions,MapView,Marker  } from "expo"; 
-
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
 export default class Home extends React.Component { 
     constructor(props) {
         super(props);
@@ -29,7 +30,8 @@ export default class Home extends React.Component {
     componentDidMount(){
         this.setState({isready:true})
     }
-    render() { 
+    render() {   
+    const {navigate} = this.props.navigation; 
         console.log("Latitude: "+this.state.lat+"\n Longitude: "+this.state.long+"\n LatDelta: "+this.state.latitudeDelta+"\n LongDelta: "+this.state.longitudeDelta);
         return (
             this.state.lat && this.state.isready  ?
@@ -44,9 +46,13 @@ export default class Home extends React.Component {
                         longitudeDelta:this.state.longitudeDelta
                     }}
                 />
+                <ActionButton buttonColor="#dc3545" onPress={()=>{navigate('Camera')}}
+                renderIcon={()=>{return <Icon name="md-camera" style={styles.actionButtonIcon}/>}}>
+                </ActionButton>
             </View>
              
             : <View style={styles.container}><ActivityIndicator size="large" color="#dc3545" /></View>
+            
         ); 
     } 
 }
@@ -60,6 +66,9 @@ const styles = StyleSheet.create({
     },
     map:{
         ...StyleSheet.absoluteFillObject,
-        flex:1
-    }
+    },actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
+      },
 });

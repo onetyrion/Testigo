@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import RoutesNoAuth from './Components/NoAuth/RoutesNoAuth';
 import RoutesAuth from './Components/Auth/RoutesAuth';
 import Home from './Components/Auth/Home';
+import Test from './Components/Test';
 
 // versión expo 2.18.4
 export default class App extends React.Component {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text,ScrollView } from 'react-native';
-
+import { View, Text,ScrollView,StyleSheet } from 'react-native';
+import Test from '../Test';
 export default class TyC extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +12,7 @@ export default class TyC extends Component {
   };
   render() {
     return (
-      <ScrollView style={{margin:30}}>
+      <ScrollView style={styles.container}>
         <Text> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga ad non libero veniam cupiditate, sit praesentium. Maiores, earum quisquam, perferendis culpa voluptatibus maxime non laborum ut aperiam optio numquam ratione.
         Eum doloremque ab doloribus aut dignissimos facere ea, sed quia laborum corporis unde consequuntur? Molestiae, quibusdam? Culpa explicabo error repudiandae, illum sequi optio eum ipsa? Nemo labore nisi maiores consequuntur?
         Similique, iusto libero blanditiis sit eos placeat magnam consequuntur fuga tempora ut dignissimos iste architecto neque natus id qui provident ad exercitationem corrupti odit. Qui obcaecati quasi ad nihil fuga?
@@ -117,3 +117,8 @@ export default class TyC extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    margin: 30,
+  }
+});

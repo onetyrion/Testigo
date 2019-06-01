@@ -7,7 +7,7 @@ import Home from './Home';
 import Profile from './Profile';
 import Logout from './Logout';
 import About from './About';
-
+import Camera from './Camera';
 class NavigationDrawerStructure extends Component {
   toggleDrawer = () => {
     this.props.navigationProps.toggleDrawer();
@@ -39,6 +39,9 @@ const Home_StackNavigator = createStackNavigator({
       headerTintColor: '#fff',
     }),
   },
+  Camera:{
+    screen: Camera
+  }
 });
 
 const Profile_StackNavigator = createStackNavigator({
@@ -82,7 +85,6 @@ const About_StackNavigator = createStackNavigator({
     }),
   },
 });
-
 const DrawerNavigatorExample = createDrawerNavigator({
   Home: {
     screen: Home_StackNavigator,
@@ -107,6 +109,6 @@ const DrawerNavigatorExample = createDrawerNavigator({
     navigationOptions: {
       drawerLabel: 'Acerca de',
     },
-  },
+  }
 });
 export default createAppContainer(DrawerNavigatorExample);

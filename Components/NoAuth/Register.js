@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View,Image, TextInput,StyleSheet,TouchableOpacity,KeyboardAvoidingView,Modal,TouchableHighlight,Alert } from 'react-native';
+import { View,Image, TextInput,StyleSheet,TouchableOpacity,KeyboardAvoidingView,Modal,ActivityIndicator,Alert } from 'react-native';
 import { CheckBox,Icon,Text,Button } from 'react-native-elements';
 import Carnet from '../../assets/carnet2.jpeg';
 
 export default class componentName extends Component {
   constructor(props) {
     super(props);
-    this.state = {checked:true,modalVisible:false}
+    this.state = {checked:true,modalVisible:false,isready:false}
   }
 
   static navigationOptions = {
@@ -15,12 +15,15 @@ export default class componentName extends Component {
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
+  componentDidMount(){
+    this.setState({isready:true});
+  }
   render() {
     const {goBack} = this.props.navigation;
     const {navigate} = this.props.navigation;
     return (
+      this.state.isready ?
       <View style={styles.container}>
-
         <Modal
           visible={this.state.modalVisible}
           animationType={'fade'}
@@ -69,6 +72,7 @@ export default class componentName extends Component {
         </View>
         </KeyboardAvoidingView>
       </View>
+      : <View style={styles.container}><ActivityIndicator size="large" color="#dc3545" /></View>
     );
   }
 }
