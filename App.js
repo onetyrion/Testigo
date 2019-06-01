@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Login from './Components/NoAuth/Login'; 
 import RoutesNoAuth from './Components/NoAuth/RoutesNoAuth';
 
 export default class App extends React.Component {

@@ -1,31 +1,39 @@
 import React, { Component } from 'react';
-import { View, Text,Image,StyleSheet,TextInput,Button,TouchableOpacity } from 'react-native';
+import { View,ScrollView, Text,Image,StyleSheet,TextInput,Button,TouchableOpacity } from 'react-native';
 import {createStackNavigator, createAppContainer} from 'react-navigation';
-import icon from '../../assets/Logo.png'; 
+import icon from '../../assets/LogoV2.jpeg'; 
 import {KeyboardAvoidingView} from 'react-native';
+import { Font } from 'expo';
 
 export default class Login extends Component {
   constructor(props) {
-    super(props)
+    super(props),
+    this.state={fontLoaded: false}
   }
   static navigationOptions = {
     header:null
   };
-
+  async componentDidMount() {
+    await Font.loadAsync({
+      'pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
+    });
+    this.setState({ fontLoaded: true });
+  }
   render() {
     const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <Text style={styles.text}> Testigo </Text>
+          {this.state.fontLoaded ? ( <Text style={styles.text}> Testigo </Text>):null}
+       
         <Image source={icon} style={styles.img}/> 
         <TextInput placeholder="Ingrese su RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput}/>
         <TextInput placeholder="Ingrese su Contraseña" placeholderTextColor="#b0b0b0" style={styles.textInput2}/>
         <TouchableOpacity style={styles.button}>
-            <Text style={{color: "#fff",fontSize:15}}>Iniciar Sesión</Text>
+          <Text style={{color: "#fff",fontSize:15}} onPress={()=>{navigate("Home")}}>Iniciar Sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{marginTop:10}} onPress={()=>{navigate("SignUp")}}>  
-            <Text style={{color: "#00B4DB",fontSize:15}}>Registrarse</Text>
+          <Text style={{color: "#00B4DB",fontSize:15}}>Registrarse</Text>
         </TouchableOpacity>
         </KeyboardAvoidingView>
       </View>
@@ -40,12 +48,14 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     img: {
-        width: 200,
-        height: 200
+        width: 140,
+        height: 140,
+        borderRadius:7
     },
     text:{
-        fontSize: 35,
-        marginBottom: 60,
+        fontFamily: 'pacifico',
+        fontSize: 40,
+        marginBottom: 30,
     },
     textInput:{
         marginTop: 40,
