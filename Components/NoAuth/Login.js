@@ -30,7 +30,7 @@ export default class Login extends Component {
         <TextInput placeholder="Ingrese su RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput}/>
         <TextInput placeholder="Ingrese su Contraseña" placeholderTextColor="#b0b0b0" style={styles.textInput2}/>
         <TouchableOpacity style={styles.button}>
-          <Text style={{color: "#fff",fontSize:15}} onPress={()=>{navigate("Home")}}>Iniciar Sesión</Text>
+          <Text style={{color: "#fff",fontSize:15}} onPress={()=>{navigate("RoutesAuth")}}>Iniciar Sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{marginTop:10}} onPress={()=>{navigate("SignUp")}}>  
           <Text style={{color: "#00B4DB",fontSize:15}}>Registrarse</Text>

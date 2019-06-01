@@ -15,31 +15,34 @@ export default class Home extends React.Component {
         };
     }
     componentWillMount(){
-        navigator.geolocation.getCurrentPosition(
-            (position)=>{
-                const lat = position.coords.latitude;
-                const long =position.coords.longitude;
-                this.setState({lat,long});
-            });
+        try { 
+            navigator.geolocation.getCurrentPosition(
+                (position)=>{
+                    const lat = position.coords.latitude;
+                    const long =position.coords.longitude;
+                    this.setState({lat,long});
+                }
+            );
+        } catch (error) {
+            console.log(error)
+        }
     }
-    static navigationOptions = {
-        title:"Testigo",
-    };
     render() { 
         console.log("Latitude: "+this.state.lat+"\n Longitude: "+this.state.long+"\n LatDelta: "+this.state.latitudeDelta+"\n LongDelta: "+this.state.longitudeDelta);
         return (
-            this.state.lat ?
+            this.state.lat  ?
+            <View style={styles.container}>
                 <MapView
                 showsUserLocation={true} followUserLocation={true}
-                    style={{ flex: 1 }}
+                    style={styles.map}
                     initialRegion={{
                         latitude: this.state.lat,
                         longitude: this.state.long,
                         latitudeDelta:this.state.latitudeDelta,
                         longitudeDelta:this.state.longitudeDelta
                     }}
-                >
-                </MapView>
+                />
+            </View>
              
             : null
         ); 
@@ -52,5 +55,9 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    map:{
+        ...StyleSheet.absoluteFillObject,
+        flex:1
     }
 });

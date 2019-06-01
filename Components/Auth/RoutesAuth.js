@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { createDrawerNavigator,createStackNavigator,createAppContainer} from 'react-navigation';
 import { Icon } from 'react-native-elements';
- 
-import Screen1 from './Auth/Home';
-import Screen2 from './NoAuth/TyC';
-import Screen3 from './NoAuth/Register';
- 
+
+import Home from './Home';
+import Profile from './Profile';
+import Logout from './Logout';
+import About from './About';
+
 class NavigationDrawerStructure extends Component {
   toggleDrawer = () => {
     this.props.navigationProps.toggleDrawer();
@@ -15,21 +16,22 @@ class NavigationDrawerStructure extends Component {
     return (
       <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
-          <Icon name='search' 
+          <Icon name='bars' 
             type='font-awesome' 
-            containerStyle={{ width: 25, height: 25, marginLeft: 5 }}
-            underlayColor="#b0b0b0"/>
+            containerStyle={{ width: 25, height: 25, marginLeft: 15 }}
+            color="#fff"
+            underlayColor="#a0a0a0"/>
         </TouchableOpacity>
       </View>
     );
   }
 }
 
-const FirstActivity_StackNavigator = createStackNavigator({
+const Home_StackNavigator = createStackNavigator({
   First: {
-    screen: Screen1,
+    screen: Home,
     navigationOptions: ({ navigation }) => ({
-      title: 'Demo Screen 1',
+      title: 'Testigo',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#dc3545',
@@ -38,16 +40,12 @@ const FirstActivity_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
-//For React Navigation 2.+ need to use StackNavigator instead createStackNavigator
-//const FirstActivity_StackNavigator = StackNavigator({
-//For React Navigation 3.+
-const Screen2_StackNavigator = createStackNavigator({
-  //All the screen from the Screen2 will be indexed here
+
+const Profile_StackNavigator = createStackNavigator({
   Second: {
-    screen: Screen2,
+    screen: Profile,
     navigationOptions: ({ navigation }) => ({
-      title: 'Demo Screen 2',
+      title: 'Perfil',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#dc3545',
@@ -56,16 +54,12 @@ const Screen2_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
-//For React Navigation 2.+ need to use StackNavigator instead createStackNavigator
-//const FirstActivity_StackNavigator = StackNavigator({
-//For React Navigation 3.+
-const Screen3_StackNavigator = createStackNavigator({
-  //All the screen from the Screen3 will be indexed here
+
+const Logout_StackNavigator = createStackNavigator({
   Third: {
-    screen: Screen3,
+    screen: Logout,
     navigationOptions: ({ navigation }) => ({
-      title: 'Demo Screen 3',
+      title: 'Cerrar sesión',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
         backgroundColor: '#dc3545',
@@ -74,31 +68,44 @@ const Screen3_StackNavigator = createStackNavigator({
     }),
   },
 });
- 
-//For React Navigation 2.+ need to use DrawerNavigator instead createDrawerNavigator
-//const DrawerNavigatorExample = DrawerNavigator({
-//For React Navigation 3.+
+
+const About_StackNavigator = createStackNavigator({
+  Four: {
+    screen: About,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Acerca de',
+      headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+});
+
 const DrawerNavigatorExample = createDrawerNavigator({
-  //Drawer Optons and indexing
-  Screen1: {
-    //Title
-    screen: FirstActivity_StackNavigator,
+  Home: {
+    screen: Home_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'Demo Screen 1',
+      drawerLabel: 'Home',
     },
   },
-  Screen2: {
-    //Title
-    screen: Screen2_StackNavigator,
+  Profile: {
+    screen: Profile_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'Demo Screen 2',
+      drawerLabel: 'Perfil',
     },
   },
-  Screen3: {
-    //Title
-    screen: Screen3_StackNavigator,
+  Logout: {
+    screen: Logout_StackNavigator,
     navigationOptions: {
-      drawerLabel: 'Demo Screen 3',
+      drawerLabel: 'Cerrar Sesión',
+    },
+  },
+  About: {
+    screen: About_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Acerca de',
     },
   },
 });
