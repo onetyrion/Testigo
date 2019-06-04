@@ -1,25 +1,36 @@
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import ActionButton from 'react-native-action-button';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react';
+import { Button, Image, View } from 'react-native';
+import { ImagePicker } from 'expo';
 
-
-export default class Test extends Component {
+export default class ImagePickerExample extends React.Component {
+  state = {
+    image: null,
+  };
 
   render() {
+    let { image } = this.state;
+
     return (
-        <ActionButton buttonColor="#dc3545">
-          <Icon name="ios-camera" style={styles.actionButtonIcon} />
-        </ActionButton>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button
+          title="Pick an image from camera roll"
+          onPress={this._pickImage}
+        />
+        {image &&
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      </View>
     );
   }
 
-}
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+    }); 
 
-const styles = StyleSheet.create({
-  actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: 'white',
-  },
-});
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+}

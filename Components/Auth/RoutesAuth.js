@@ -7,7 +7,11 @@ import Home from './Home';
 import Profile from './Profile';
 import Logout from './Logout';
 import About from './About';
-import Camera from './Camera';
+import Camera from './Camera/camera.page';
+import SendPost from './SendPost';
+import TyC from '../NoAuth/TyC';
+import Contact from './Contact';
+
 class NavigationDrawerStructure extends Component {
   toggleDrawer = () => {
     this.props.navigationProps.toggleDrawer();
@@ -40,8 +44,19 @@ const Home_StackNavigator = createStackNavigator({
     }),
   },
   Camera:{
-    screen: Camera
-  }
+    screen: Camera,
+    navigationOptions:{header:null}
+  },
+  SendPost:{
+    screen: SendPost,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Enviar denuncia',
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }), 
+  },
 });
 
 const Profile_StackNavigator = createStackNavigator({
@@ -83,6 +98,26 @@ const About_StackNavigator = createStackNavigator({
       },
       headerTintColor: '#fff',
     }),
+  },
+  TyC:{
+    screen: TyC,
+    navigationOptions:{
+      title: "Terminos y Condiciones",
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }
+  },
+  Contact:{
+    screen: Contact,
+    navigationOptions:{
+      title: "Contacto",
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }
   },
 });
 const DrawerNavigatorExample = createDrawerNavigator({

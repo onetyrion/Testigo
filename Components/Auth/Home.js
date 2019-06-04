@@ -30,9 +30,12 @@ export default class Home extends React.Component {
     componentDidMount(){
         this.setState({isready:true})
     }
+    Logout(){
+        dismiss();
+    }
     render() {   
-    const {navigate} = this.props.navigation; 
-        console.log("Latitude: "+this.state.lat+"\n Longitude: "+this.state.long+"\n LatDelta: "+this.state.latitudeDelta+"\n LongDelta: "+this.state.longitudeDelta);
+    const {navigate} = this.props.navigation;
+    const {dismiss} = this.props.navigation; 
         return (
             this.state.lat && this.state.isready  ?
             <View style={styles.container}>
