@@ -11,6 +11,10 @@ export default class componentName extends Component {
 
   static navigationOptions = {
     title:"Registrarse",
+    headerStyle: {
+      backgroundColor: '#dc3545',
+    },
+    headerTintColor: '#fff',
   };
   setModalVisible(visible) {
     this.setState({modalVisible: visible});

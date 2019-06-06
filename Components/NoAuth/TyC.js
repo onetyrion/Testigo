@@ -9,6 +9,10 @@ export default class TyC extends Component {
   }
   static navigationOptions = {
     title:"Terminos y Condiciones",
+    headerStyle: {
+      backgroundColor: '#dc3545',
+    },
+    headerTintColor: '#fff',
   };
   render() {
     return (

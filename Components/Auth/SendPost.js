@@ -41,10 +41,10 @@ export default class Camera extends Component {
             onPress={() => this.setState({checked2: !this.state.checked2})}
           />
           <View style={{padding:5,flexDirection:'row'}}>
-            <TouchableOpacity onPress={()=>{}} style={styless.button1}>
+            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: false })}} style={styless.button1}>
               <Text style={{color:'#fff'}}>Cancelar</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{}} style={styless.button1}>
+            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: false })}} style={styless.button1}>
               <Text style={{color:'#fff'}}>Aceptar</Text>
             </TouchableOpacity> 
           </View>                 
