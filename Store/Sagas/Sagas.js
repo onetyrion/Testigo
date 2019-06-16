@@ -10,7 +10,7 @@ const RegisterBD = ({uid,email,rut,ndoc}) =>
         ndoc: ndoc,
         email: email 
     });
-
+    
 function* sagaRegistro(values){
     try {
         const registro = yield call(registroenFirebase,values.datos);
@@ -23,6 +23,17 @@ function* sagaRegistro(values){
         console.log(error)
     }
 }
+const getemail= ({rut,password})=>{
+    database.ref("usuarios")
+    .orderByChild("email")
+    .on("child_added",
+ (snapshot)=>{
+    var d = snapshot.val();
+    if(d.rut == rut){
+        loginFirebasebase({correo:d.email,password:password});
+    }
+ })
+};
 
 const loginFirebasebase = ({correo,password}) => auth
 .signInWithEmailAndPassword(correo, password)
@@ -30,8 +41,9 @@ const loginFirebasebase = ({correo,password}) => auth
 function* sagaLogin(values){
     try {
         console.log(values);
-        const resultado =yield call(loginFirebasebase,values.datos);
-        console.log(resultado);
+        yield call(getemail,values.datos);
+        //const resultado =yield call(loginFirebasebase,values.datos);
+        
     } catch (error) {
         console.log(error);
     }

@@ -21,11 +21,12 @@ const fieldNombre = (props) => {
 }
 const validate =(values)=>{
     const errors ={};
-    if(!values.correo){
-        errors.correo = 'requerido';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)){
-        errors.correo = 'correo invalido';
-    } 
+    if(!values.rut){
+        errors.rut = 'requerido';
+    }
+    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)){
+    //     errors.correo = 'correo invalido';
+    // } 
     if(!values.password){
         errors.password = 'requerido';
     }else if(values.password.length <5){
@@ -39,7 +40,7 @@ const SignInForms = (props)=>{
     // console.log(props);
     return(
         <View style={{justifyContent: 'center',alignItems:'center'}}>
-            <Field name="correo" component={fieldNombre} pc='Ingrese su RUT'/>
+            <Field name="rut" component={fieldNombre} pc='Ingrese su RUT'/>
             <Field name="password" component={fieldNombre} pc='Ingrese su Contraseña'/>
             <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.login)}>
                 <Text style={{color: "#fff",fontSize:15}}>Iniciar Sesión</Text>
