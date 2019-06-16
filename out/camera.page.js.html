@@ -1,9 +1,37 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: camera.page.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: camera.page.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
 import { View,Image,ScrollView,TouchableOpacity, Text } from 'react-native';
 import { Camera, Permissions,ImagePicker } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
-import { stylesCamera } from '../StylesAuth';
+import styles from './styles';
 import Toolbar from './toolbar.component';
 import Gallery from './gallery.component';
 /**
@@ -63,7 +91,7 @@ export default class CameraPage extends React.Component {
     async componentDidMount() {
         const camera = await Permissions.askAsync(Permissions.CAMERA);
         const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-        const hasCameraPermission = (camera.status === 'granted' && audio.status === 'granted');
+        const hasCameraPermission = (camera.status === 'granted' &amp;&amp; audio.status === 'granted');
 
         this.setState({ hasCameraPermission });
     };
@@ -85,39 +113,39 @@ export default class CameraPage extends React.Component {
     render() {
         const { hasCameraPermission, flashMode, cameraType, capturing, captures } = this.state;
         if (hasCameraPermission === null) {
-            return <View />;
+            return &lt;View />;
         } else if (hasCameraPermission === false) {
-            return <Text>Acceso denegado a camara.</Text>;
+            return &lt;Text>Acceso denegado a camara.&lt;/Text>;
         }
         let { imagePick } = this.state;
         const {navigate} = this.props.navigation;
         return (
-            <React.Fragment>    
-                <View>           
-                    <Camera
+            &lt;React.Fragment>    
+                &lt;View>           
+                    &lt;Camera
                         type={cameraType}
                         flashMode={flashMode}
-                        style={stylesCamera.preview}
+                        style={styles.preview}
                         ref={camera => this.camera = camera}
                     />
-                </View> 
-            <TouchableOpacity style={{justifyContent:"flex-end",alignItems:"flex-end",height:50,width:50,marginLeft:300,marginTop:32}}
+                &lt;/View> 
+            &lt;TouchableOpacity style={{justifyContent:"flex-end",alignItems:"flex-end",height:50,width:50,marginLeft:300,marginTop:32}}
             onPress={()=>{navigate("SendPost",{"Yeah":captures})}} >
-                <Ionicons name="md-send" size={32} color="#f2f2f2" />
-            </TouchableOpacity>
-                {captures.length >= 0 && 
+                &lt;Ionicons name="md-send" size={32} color="#f2f2f2" />
+            &lt;/TouchableOpacity>
+                {captures.length >= 0 &amp;&amp; 
                 
-                <ScrollView 
+                &lt;ScrollView 
                 horizontal={true}
-                style={[stylesCamera.bottomToolbar, stylesCamera.galleryContainer]} >
-                    <TouchableOpacity style={{width:72,height:72,marginRight: 5,justifyContent:"center",alignItems:"center"}} 
+                style={[styles.bottomToolbar, styles.galleryContainer]} >
+                    &lt;TouchableOpacity style={{width:72,height:72,marginRight: 5,justifyContent:"center",alignItems:"center"}} 
                     onPress={this._pickImage
                     }>
-                        <Ionicons name="md-images" size={52} color="white" />
-                    </TouchableOpacity>
-                    <Gallery captures={captures}/>
-                </ScrollView>}
-                <Toolbar 
+                        &lt;Ionicons name="md-images" size={52} color="white" />
+                    &lt;/TouchableOpacity>
+                    &lt;Gallery captures={captures}/>
+                &lt;/ScrollView>}
+                &lt;Toolbar 
                     capturing={capturing}
                     flashMode={flashMode}
                     cameraType={cameraType}
@@ -128,8 +156,30 @@ export default class CameraPage extends React.Component {
                     onLongCapture={this.handleLongCapture}
                     onShortCapture={this.handleShortCapture}
                 />
-            </React.Fragment>
+            &lt;/React.Fragment>
         );
     };
     
-};
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#componentDidMount">componentDidMount</a></li><li><a href="global.html#render">render</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Thu Jun 06 2019 17:02:26 GMT-0400 (GMT-04:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

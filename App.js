@@ -1,15 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import RoutesNoAuth from './Components/NoAuth/RoutesNoAuth';
-import RoutesAuth from './Components/Auth/RoutesAuth';
-import Routes from './Components/Routes';
-import Contact from './Components/Auth/Contact';
+import {Provider} from 'react-redux';
+import store from './Store/Store';
+import Selection from './Selection';
 // versión expo 2.18.4
 export default class App extends React.Component {
 
   render() {
     return (
-      <RoutesNoAuth/> 
+      <View style={styles.container}>
+        <Provider store={store}>
+          <Selection />
+        </Provider>
+      </View>
     );
   }
 }
@@ -18,7 +21,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

@@ -1,19 +1,15 @@
 import React from 'react';
 import { View, Image, ScrollView } from 'react-native';
+import { stylesCamera } from '../StylesAuth';
 
-import styles from './styles';
-
+/**
+ * @description Componente que recorre la propiedad capturas y retorna la imagen en una view.
+ */
 export default ({captures=[]}) => (
         
-        // (captures.length ==0)?
-        // captures.map(() => (
-        //     <View style={styles.galleryImageContainer} key={require("../screenshots/camera-preview.png")} >
-        //         <Image source={require("../screenshots/camera-preview.png")} style={styles.galleryImage} />
-        //     </View>
-        // )):
         captures.map(({ uri }) => (
-            <View style={styles.galleryImageContainer} key={uri} >
-                <Image source={{ uri }} style={styles.galleryImage} />
+            <View style={stylesCamera.galleryImageContainer} key={uri} >
+                <Image source={{ uri }} style={stylesCamera.galleryImage} />
             </View>
         ))
 );

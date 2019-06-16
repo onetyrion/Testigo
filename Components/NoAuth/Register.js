@@ -2,13 +2,22 @@ import React, { Component } from 'react';
 import { View,Image, TextInput,StyleSheet,TouchableOpacity,KeyboardAvoidingView,Modal,ActivityIndicator,Alert } from 'react-native';
 import { CheckBox,Icon,Text,Button } from 'react-native-elements';
 import Carnet from '../../assets/carnet2.jpeg';
+import { stylesRegister } from './StylesNoAuth';
+import { connect} from 'react-redux';
+import RegisterForm from './Forms/RegisterForm';
+import { actionREGISTER } from '../../Store/ACTIONS';
 
-export default class componentName extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = {checked:true,modalVisible:false,isready:false}
+    this.state = {checked:true,modalVisible:true,isready:false}
   }
-
+  registroUsuario = (values) => {
+    this.props.registro(values)
+  };
+  onpressChk = () =>{
+    this.setState({checked:!this.state.checked});
+  }
   static navigationOptions = {
     title:"Registrarse",
     headerStyle: {
@@ -16,8 +25,9 @@ export default class componentName extends Component {
     },
     headerTintColor: '#fff',
   };
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+  setModalVisible=()=> {
+    console.log(this.state.modalVisible);
+    this.setState({modalVisible: !this.state.modalVisible});
   }
   componentDidMount(){
     this.setState({isready:true});
@@ -27,106 +37,76 @@ export default class componentName extends Component {
     const {navigate} = this.props.navigation;
     return (
       this.state.isready ?
-      <View style={styles.container}>
+      <View style={stylesRegister.container}>
         <Modal
           visible={this.state.modalVisible}
           animationType={'fade'}
           transparent={true}
-          onRequestClose={() => this.setModalVisible(false)}>
-          <View style={styles.modalContainer}>
-            <View style={styles.innerContainer}>
+          onRequestClose={this.setModalVisible}>
+          <View style={stylesRegister.modalContainer}>
+            <View style={stylesRegister.innerContainer}>
               <Image source={Carnet} style={{width:260,height:380}}/>
               <Button
-                onPress={() => this.setModalVisible(false)} 
+                onPress={this.setModalVisible} 
                 title="Cerrar"
-                buttonStyle={styles.button}
+                buttonStyle={stylesRegister.button}
               >
               </Button>
             </View>
           </View>
         </Modal>
 
-        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <TextInput placeholder="RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput1}/>
+        <KeyboardAvoidingView style={stylesRegister.container} behavior="padding" enabled>
+          <RegisterForm 
+            registro={this.registroUsuario} 
+            pressChk={this.state.checked} 
+            onpressChk={this.onpressChk}
+            navigate={navigate}
+            goBack={goBack}
+            pressModal={this.setModalVisible}/>
+        {/* <TextInput placeholder="RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput1}/>
         <View style={{flexDirection: "row", backgroundColor:'#f0f0f0',padding:3,marginTop:20,borderRadius:5}}>
-        <TextInput placeholder="N° de documento" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput2}/>
+        <TextInput placeholder="N° de documento" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput2}/>
           <Icon name='search' 
             type='font-awesome' 
             containerStyle={{marginTop:3,paddingLeft:10,marginRight:7}}
             underlayColor="#b0b0b0"
             onPress={()=>{this.setModalVisible(true);}}/> 
         </View>
-        <TextInput placeholder="Contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput}/>
-        <TextInput placeholder="Repita su contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput}/>
-        <TextInput placeholder="Email" placeholderTextColor="#b0b0b0" maxLength={12} style={styles.textInput}/>
+        <TextInput placeholder="Contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
+        <TextInput placeholder="Repita su contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
+        <TextInput placeholder="Email" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
         <CheckBox
           title='Aceptar los terminos y condiciones (Manten para ver más)' 
           checked={this.state.checked}
           onPress={() => this.setState({checked: !this.state.checked})}
           onLongPress={() => {navigate('TyC')}}
-          containerStyle={styles.CheckBox}
+          containerStyle={stylesRegister.CheckBox}
         />
         <View style={{flexDirection:"row"}}>
-          <TouchableOpacity style={styles.button} onPress={() => {goBack()}}>
+          <TouchableOpacity style={stylesRegister.button} onPress={() => {goBack()}}>
             <Text style={{color: "#fff",fontSize:15}}>Cancelar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={stylesRegister.button}>
             <Text style={{color: "#fff",fontSize:15}}>Aceptar</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         </KeyboardAvoidingView>
       </View>
-      : <View style={styles.container}><ActivityIndicator size="large" color="#dc3545" /></View>
+      : <View style={stylesRegister.container}><ActivityIndicator size="large" color="#dc3545" /></View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },textInput1:{
-    padding: 5,
-    width:270,
-    borderRadius: 7,
-    backgroundColor:"#f0f0f0"
-  },textInput:{
-    marginTop: 20,
-    padding: 5,
-    width:270,
-    borderRadius: 7,
-    backgroundColor:"#f0f0f0"
-  },textInput2:{
-    width:224,
-    height:33,
-    borderRadius: 7,
-    backgroundColor:"#f0f0f0"
-  },CheckBox:{
-    backgroundColor:'#fff',
-    borderColor: '#fff',
-    width:270
-  },button:{
-    alignItems:'center',
-    width:123,
-    marginTop:20,
-    margin:10,
-    padding:10,
-    backgroundColor: "#dc3545",
-    borderColor: "#dc3545",
-    borderRadius:10
-},modalContainer: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems:'center',
-  backgroundColor:'rgba(0, 0, 0, 0.5)',
-},innerContainer: {
-  alignItems: 'center',
-  padding:20,
-  width:300,
-  backgroundColor:"#fff",
-  borderRadius:5
+const mapStateToProps = (state, ownProps) => {
+  return {
+    prop: state.prop
+  }
 }
-});
+const mapDispatchToProps = (dispatch) => ({
+  registro: (values) => {
+    dispatch(actionREGISTER(values));
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
   

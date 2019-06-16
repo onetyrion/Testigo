@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { View,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-native';
 import {Input,Text,Card,CheckBox,ButtonGroup, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { stylesContact } from './StylesAuth';
 
+/**
+ * @class Componente que renderiza el apartado contact.
+ */
 export default class Contact extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +47,7 @@ export default class Contact extends Component {
             maxLength = {340} />
         </Card>
         <View style={{flexDirection: 'row-reverse',paddingLeft:20}}>
-        <TouchableOpacity onPress={()=>{ToastAndroid.show('Se ha enviado su mensaje',ToastAndroid.SHORT)}} style={styles.button}>
+        <TouchableOpacity onPress={()=>{ToastAndroid.show('Se ha enviado su mensaje',ToastAndroid.SHORT)}} style={stylesContact.button}>
             <Text  style={{color: "#fff",fontSize:15}}>Enviar</Text>
         </TouchableOpacity>
         </View>
@@ -51,14 +55,4 @@ export default class Contact extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-    button:{
-        alignItems:'center',
-        width:150,
-        marginTop:40,
-        padding:10,
-        backgroundColor: "#dc3545",
-        borderColor: "#dc3545",
-        borderRadius:10,
-    },
-})
+

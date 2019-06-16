@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View,Dimensions,Image,ScrollView,StyleSheet,TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Gallery from './Camera/gallery.component';
-import styles from './Camera/styles';
 import {Input,Text,Card,CheckBox,ButtonGroup, Button,Overlay} from 'react-native-elements';
+import { stylesSendPost } from './StylesAuth';
 
 export default class Camera extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class Camera extends Component {
   render() {
     const captures = this.state.captures;
     return (
-      <View style={styless.imageContainer}>
+      <View style={stylesSendPost.imageContainer}>
         <Overlay
         isVisible={this.state.isVisible}
         onBackdropPress={() => this.setState({ isVisible: false })}
@@ -41,15 +41,15 @@ export default class Camera extends Component {
             onPress={() => this.setState({checked2: !this.state.checked2})}
           />
           <View style={{padding:5,flexDirection:'row'}}>
-            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: false })}} style={styless.button1}>
+            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: !this.state.isVisible })}} style={stylesSendPost.button1}>
               <Text style={{color:'#fff'}}>Cancelar</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: false })}} style={styless.button1}>
+            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: !this.state.isVisible })}} style={stylesSendPost.button1}>
               <Text style={{color:'#fff'}}>Aceptar</Text>
             </TouchableOpacity> 
           </View>                 
         </Overlay>        
-        <Card style={styless.card}>
+        <Card style={stylesSendPost.card}>
           <Input
           label={"Mensaje:"}
           containerStyle={{marginTop:5}}
@@ -59,10 +59,10 @@ export default class Camera extends Component {
         </Card>
         <ScrollView 
           horizontal={true}
-          style={[styless.images]} >
+          style={[stylesSendPost.images]} >
             <Gallery captures={captures}/>
         </ScrollView>
-        <TouchableOpacity onPress={()=>{}} style={styless.button}>
+        <TouchableOpacity onPress={()=>{}} style={stylesSendPost.button}>
           <Text style={{color:'#fff'}}>Enviar</Text>
         </TouchableOpacity>
       </View>
@@ -70,41 +70,3 @@ export default class Camera extends Component {
   }
 }
 
-const { width: winWidth, height: winHeight } = Dimensions.get('window');
-
-const styless = StyleSheet.create({
-  imageContainer:{
-    flex:1,
-  },
-  images:{
-    flex:0.2,
-    width: winWidth,
-    height:50,
-    position: "relative",
-    marginTop: 50,
-    paddingLeft: 5,
-  },
-  card:{
-    position:'relative',
-    marginTop: 100,
-  },
-  button:{
-    alignItems:'center',
-    width:150,
-    padding:10,
-    backgroundColor: "#dc3545",
-    borderColor: "#dc3545",
-    borderRadius:10,
-    marginBottom: 250,
-    marginLeft: 110,
-  },
-  button1:{
-    alignItems:'center',
-    width:150,
-    padding:10,
-    backgroundColor: "#dc3545",
-    borderColor: "#dc3545",
-    borderRadius:10,
-    marginLeft: 5,
-  },
-});

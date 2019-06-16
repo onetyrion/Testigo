@@ -1,21 +1,20 @@
 import RNRestart from 'react-native-restart';
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements';
+import { auth } from '../../Store/Services/Firebase';
+import { stylesHome } from './StylesAuth';
 
 export default class Logout extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    auth.signOut();
   }
-
-  render() {
-    console.log("Holaaa");
-    return (
-      <View>
-        <Button onPress={()=>{}}>Hola</Button>
+  render(){
+    return(
+      <View style={stylesHome.container}>
+        <ActivityIndicator  size="large" color="#dc3545"/>
       </View>
-    );
+    )
   }
 }
