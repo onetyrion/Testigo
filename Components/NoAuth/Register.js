@@ -10,7 +10,7 @@ import { actionREGISTER } from '../../Store/ACTIONS';
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = {checked:true,modalVisible:true,isready:false}
+    this.state = {checked:true,modalVisible:false,isready:false}
   }
   registroUsuario = (values) => {
     this.props.registro(values)

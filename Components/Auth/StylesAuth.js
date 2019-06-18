@@ -37,6 +37,14 @@ export const stylesSendPost = StyleSheet.create({
     borderRadius:10,
     marginLeft: 5,
   },
+  textInput:{
+    marginTop:30,
+    height: 35,
+    padding: 5,
+    width:270,
+    borderRadius: 7,
+    backgroundColor:"#f0f0f0"
+  }
 });
 export const stylesProfile = StyleSheet.create({
     header:{

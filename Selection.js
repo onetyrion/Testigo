@@ -1,22 +1,28 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from './Store/Services/Firebase';
 import RoutesNoAuths from './Components/NoAuth/RoutesNoAuth';
-import { actionEstablecerSesion, actionCerrarSesion } from './Store/ACTIONS';
+import { actionEstablecerSesion, actionCerrarSesion, actionLoading } from './Store/ACTIONS';
 import RoutesAuth from './Components/Auth/RoutesAuth';
-
+import { stylesHome } from './Components/Auth/StylesAuth';
 console.ignoredYellowBox = ['Setting a timer'];
 // create a component
 class Selection extends Component {
-    componentDidMount(){
+    constructor(props){
+        super(props);
+    }
+    componentWillMount(){
         this.props.autenticacion();
     }
     render() {
+        console.log(this.props.numero[0]);
         return (
+            this.props.numero[0]  ?
             <View style={styles.container}>
                 {this.props.usuario ? <RoutesAuth /> : <RoutesNoAuths />} 
             </View>
+            :<View style={stylesHome.container}><ActivityIndicator size="large" color="#dc3545" /></View>
         );
     }
 }
@@ -30,7 +36,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        usuario: state.reducerSesion
+        numero: state.reducerPrueba,
+        prop: state.prop,
+        usuario: state.reducerSesion,
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -41,9 +49,11 @@ const mapDispatchToProps = (dispatch) => {
                 if (usuario) {
                   console.log(usuario);
                   dispatch(actionEstablecerSesion(usuario));
+                  dispatch(actionLoading(true));
                 } else {
                     console.log('no existe sesión');
                     dispatch(actionCerrarSesion(usuario));
+                    dispatch(actionLoading(true));
                 }
               });
         }

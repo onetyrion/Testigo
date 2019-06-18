@@ -14,6 +14,7 @@ import Camera from './Camera/camera.page';
 import SendPost from './SendPost';
 import TyC from '../NoAuth/TyC';
 import Contact from './Contact';
+import SendPostMap from './SendPostMap';
 /**
  * Se importan los componentes necesarios(Home, Profile, About,Camera, SendPost, Contact, Terms and conditions, Logout)
  */
@@ -57,6 +58,10 @@ const Home_StackNavigator = createStackNavigator({
   },
   Camera:{
     screen: Camera,
+    navigationOptions:{header:null}
+  },
+  pickMap:{
+    screen: SendPostMap,
     navigationOptions:{header:null}
   },
   SendPost:{

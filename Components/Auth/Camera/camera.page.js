@@ -21,6 +21,12 @@ export default class CameraPage extends React.Component {
      * @param {Camera} cameraType Configura el tipo de camara.
      * @param {Camera} flashMode Configura el flash de la camera.
      */
+    constructor(props){
+        super(props);
+        state = {
+            captures: [],
+        };
+    }
     state = {
         imagePick:null,
         captures: [],
@@ -47,7 +53,8 @@ export default class CameraPage extends React.Component {
      */
     handleShortCapture = async () => {
         const photoData = await this.camera.takePictureAsync();
-        this.setState({ capturing: false, captures: [photoData, ...this.state.captures] })
+        this.setState({ capturing: false, captures: [photoData, ...this.state.captures] });
+        this.props.navigation.navigate("SendPost",{"PhotoData":this.state.captures});
     };
 
     /**
@@ -56,6 +63,7 @@ export default class CameraPage extends React.Component {
     handleLongCapture = async () => {
         const videoData = await this.camera.recordAsync();
         this.setState({ capturing: false, captures: [videoData, ...this.state.captures] });
+        this.props.navigation.navigate("SendPost",{"PhotoData":this.state.captures});
     };
     /**
      * @description método nativo de react native, se ejecuta despues de renderizar el componenete, pregunta los permisos de acceso a camara y audio.
@@ -77,6 +85,7 @@ export default class CameraPage extends React.Component {
         
         if (!result.cancelled) {
           this.setState({ capturing: false, captures: [result, ...this.state.captures] });
+          this.props.navigation.navigate("SendPost",{"PhotoData":this.state.captures});
         }
       };
       /**
@@ -95,18 +104,20 @@ export default class CameraPage extends React.Component {
             <React.Fragment>    
                 <View>           
                     <Camera
+                        ratio="16:9"
                         type={cameraType}
                         flashMode={flashMode}
                         style={stylesCamera.preview}
                         ref={camera => this.camera = camera}
                     />
                 </View> 
+                {captures.length>0 ?
             <TouchableOpacity style={{justifyContent:"flex-end",alignItems:"flex-end",height:50,width:50,marginLeft:300,marginTop:32}}
-            onPress={()=>{navigate("SendPost",{"Yeah":captures})}} >
+            onPress={()=>{navigate("SendPost",{"PhotoData":captures})}} >
                 <Ionicons name="md-send" size={32} color="#f2f2f2" />
             </TouchableOpacity>
-                {captures.length >= 0 && 
-                
+                :null}
+            {captures.length >= 0 && 
                 <ScrollView 
                 horizontal={true}
                 style={[stylesCamera.bottomToolbar, stylesCamera.galleryContainer]} >

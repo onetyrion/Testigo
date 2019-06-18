@@ -14,10 +14,30 @@ const reducerSesion = (state=null,action) =>{
             return state;
     }
 }
-
+const reducerImagenPublicacion = (state = { imagen: null }, action) => {
+    switch (action.type) {
+      case CONSTANTS.CARGAR_IMAGEN_PUBLICACION:
+        return { imagen: action.imagen };
+      case CONSTANTS.LIMPIAR_IMAGEN_PUBLICACION:
+        return { imagen: null };
+      default:
+        return state;
+    }
+  };
+const reducerPrueba = (state=[0],action) => {
+    switch (action.type) {
+        case 'LOADING':
+            return [action.datos];
+    
+        default:
+            return state;
+    }
+};
 const reducers = combineReducers({
     reducerSesion,
     form,
+    reducerImagenPublicacion,
+    reducerPrueba
 });
 
 const sagaMiddleware = createSagaMiddleware();

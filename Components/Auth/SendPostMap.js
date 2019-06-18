@@ -7,10 +7,11 @@ export default class SelectLocationScreen extends React.Component {
   state = {
 
   };
+functionLocationView = (values) => {
 
+}
   render() {
     return(
-      <View style={{flex: 1}}>
         <LocationView
           apiKey={"AIzaSyAJKyjh4mUAuJrbKM7yosg9aCjEhZqkXeI"}
           onLocationSelect={(values)=>{console.log(values)}}
@@ -19,7 +20,6 @@ export default class SelectLocationScreen extends React.Component {
             longitude: -122.4324,
           }}
         />
-      </View>
     );
   }
 }

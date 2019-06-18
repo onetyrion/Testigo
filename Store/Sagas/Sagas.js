@@ -5,12 +5,32 @@ const registroenFirebase = (values) => auth
     .createUserWithEmailAndPassword(values.correo, values.password)
     .then(success => success);
 const RegisterBD = ({uid,email,rut,ndoc}) =>
-    database.ref('usuarios/' + uid).set({
+    database.ref('Usuarios/' + uid).set({
         rut: rut,
         ndoc: ndoc,
         email: email 
     });
+
+const registroFotoCloudinary = (imagen) => {
+    console.log(imagen);
+    const uri = imagen;
+    const splitname = uri.split('/');
+    const name = [...splitname].pop();
+    console.log(name);
+    const foto = {
+        uri,
+        type:'image/jpeg',
+        name,
+    }
+    const formImagen = new FormData();
+    formImagen.append('upload_preset', CONSTANTS.CLOUDINARY_PRESET);
+    formImagen.append('file', foto);
     
+    return fetch(CONSTANTS.CLOUDINARY_NAME, {
+        method: 'POST',
+        body: formImagen,
+    }).then(response => response.json());
+    };  
 function* sagaRegistro(values){
     try {
         const registro = yield call(registroenFirebase,values.datos);
@@ -24,7 +44,7 @@ function* sagaRegistro(values){
     }
 }
 const getemail= ({rut,password})=>{
-    database.ref("usuarios")
+    database.ref("Usuarios")
     .orderByChild("email")
     .on("child_added",
  (snapshot)=>{
@@ -48,9 +68,38 @@ function* sagaLogin(values){
         console.log(error);
     }
 }
-
+const RegisterPostBD = (values) =>
+    database.ref('Archivos/' + Date.now()).set({
+        Archivo: values.profileImageurl,
+        Audio: '',
+        Comentario: values.description,
+        Fecha: values.DateTime,
+        Institucion:{
+            Ambulancias:true,
+            Bomberos:true,
+            Carabineros: true,
+        },
+        Ubicacion:{
+            Latitud: -27.00667,
+            Longitud: -70.01142,
+        },
+        id:Date.now(),
+    });
+function* sagaSubirPublicacion(values){
+    try {
+        console.log(values);
+        const imagen = values.values.captures.uri; 
+        const upload = yield call(registroFotoCloudinary,imagen);
+        const profileImageurl = upload.secure_url;
+        const {DateTime,description} = values.values;
+        const uploadPost = yield call(RegisterPostBD,{DateTime,description,profileImageurl});
+    } catch (error) {
+        console.log(error);
+    }
+}
 export default function* funcionPrimaria(){
     yield takeEvery(CONSTANTS.REGISTRO,sagaRegistro);
     yield takeEvery(CONSTANTS.LOGIN,sagaLogin);
+    yield takeEvery(CONSTANTS.SUBIR_PUBLICACION,sagaSubirPublicacion)
     console.log('desde nuestra función generadora');
 }
