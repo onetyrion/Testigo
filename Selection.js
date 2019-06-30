@@ -7,7 +7,9 @@ import { actionEstablecerSesion, actionCerrarSesion, actionLoading } from './Sto
 import RoutesAuth from './Components/Auth/RoutesAuth';
 import { stylesHome } from './Components/Auth/StylesAuth';
 console.ignoredYellowBox = ['Setting a timer'];
-// create a component
+/**
+ * @class Clase que realiza la autentificación del usuario.
+ */
 class Selection extends Component {
     constructor(props){
         super(props);

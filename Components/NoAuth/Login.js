@@ -8,6 +8,10 @@ import { connect} from 'react-redux';
 import LoginForm from './Forms/LoginForm';
 import { actionLOGIN } from '../../Store/ACTIONS';
 
+/**
+ * @class contiene view del login y funcionabilidad anexas a este
+ */
+
 class Login extends Component {
   constructor(props) {
     super(props),

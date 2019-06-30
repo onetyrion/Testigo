@@ -5,6 +5,9 @@ import { Button } from 'react-native-elements';
 import { auth } from '../../Store/Services/Firebase';
 import { stylesHome } from './StylesAuth';
 
+/**
+ * @class componente que pone una pantalla de carga mientras carga el logout con los servidores de Firebase
+ */
 export default class Logout extends Component {
   constructor(props) {
     super(props);

@@ -7,6 +7,10 @@ import { connect} from 'react-redux';
 import RegisterForm from './Forms/RegisterForm';
 import { actionREGISTER } from '../../Store/ACTIONS';
 
+/**
+ * @class contiene la view del login y añexa funcionabilidades.
+ */
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -97,7 +101,7 @@ class Register extends Component {
     );
   }
 }
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     prop: state.prop
   }

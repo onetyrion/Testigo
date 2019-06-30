@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { View, Text,ScrollView,StyleSheet } from 'react-native';
 import Test from '../Test';
 import { stylesTyC } from './StylesNoAuth';
+/**
+ * @class contiene la view de los terminos y condiciones.
+ */
 export default class TyC extends Component {
   constructor(props) {
     super(props);

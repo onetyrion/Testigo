@@ -1,5 +1,8 @@
 import * as firebase from 'firebase';
 
+/**
+ * @class se usa para almacenar las configuraciones de la base de datos
+ */
 // var firebaseConfig = {
 //   apiKey: "AIzaSyD8EcBJaLxpeq5d9PpfwjX-N5QzzeynM0I",
 //   authDomain: "testigo-220905.firebaseapp.com",

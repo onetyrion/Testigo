@@ -1,4 +1,9 @@
 import CONSTANTS from './CONSTANTS';
+
+/**
+ * 
+ * @class almacena los action que usa la libreria redux 
+ */
 export const actionREGISTER = values =>({
     type: CONSTANTS.REGISTRO,
     datos:values

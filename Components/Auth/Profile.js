@@ -7,6 +7,9 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { stylesProfile } from './StylesAuth';
+/**
+ * @class contiene la view y las funciones de perfil del .
+ */
 export default class Profile extends Component {
 
   render() {

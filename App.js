@@ -10,12 +10,16 @@ import { YellowBox } from 'react-native';
 import _ from 'lodash';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
+YellowBox.ignoreWarnings(['Failed prop type']);
 const _console = _.clone(console);
 console.warn = message => {
   if (message.indexOf('Setting a timer') <= -1) {
     _console.warn(message);
   }
 };
+/**
+ * @class Clase Main de la aplicación, se encuentra las configuraciones iniciales de la app.
+ */
 export default class App extends React.Component {
 
   render() {

@@ -4,7 +4,10 @@ import { CheckBox,Icon,Text,Button } from 'react-native-elements';
 import {Field, reduxForm} from 'redux-form';
 import {auth} from '../../../Store/Services/Firebase';
 import { stylesRegister, stylesLogin } from '../StylesNoAuth';
-
+/**
+ * 
+ * @class Contiene el formulario y validación de este mismo del Register.  
+ */
 const fieldNombre = (props) => {
     //  console.log(props);
     return(

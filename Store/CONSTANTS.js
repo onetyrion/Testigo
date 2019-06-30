@@ -1,3 +1,6 @@
+/**
+ * @class centraliza y almacena nombres de los action de redux
+ */
 const CONSTANTS = {
  REGISTRO: 'REGISTRO',
  LOGIN: 'LOGIN',

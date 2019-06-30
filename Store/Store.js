@@ -4,6 +4,10 @@ import {reducer as form} from 'redux-form';
 import funcionPrimaria from './Sagas/Sagas';
 import CONSTANTS from './CONSTANTS';
 
+/**
+ * 
+ * @class clase principal de redux libreria que almacena un contenedor predecible del estado de aplicaciones a través de actions,reducers,y store.
+ */
 const reducerSesion = (state=null,action) =>{
     switch(action.type){
         case CONSTANTS.ESTABLECERSESION:

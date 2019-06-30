@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import { View, Text,Button,TextInput,TouchableOpacity,StyleSheet } from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import { stylesLogin } from '../StylesNoAuth';
+/**
+ * 
+ * @class Contiene el formulario y validación de este mismo del Login. 
+ */
 const fieldNombre = (props) => {
     return(
         <View >

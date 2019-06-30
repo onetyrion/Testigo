@@ -1,6 +1,13 @@
+import React, { Component } from 'react';
 import {takeEvery, call} from 'redux-saga/effects';
 import CONSTANTS from '../CONSTANTS';
 import { database, auth } from '../Services/Firebase';
+import { View,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-native';
+/**
+ * 
+ * @class Contiene los métodos que se conectan con Firebase
+ */
+
 const registroenFirebase = (values) => auth
     .createUserWithEmailAndPassword(values.correo, values.password)
     .then(success => success);
@@ -11,15 +18,14 @@ const RegisterBD = ({uid,email,rut,ndoc}) =>
         email: email 
     });
 
-const registroFotoCloudinary = (imagen) => {
-    console.log(imagen);
+const registroFotoCloudinary = ({imagen,type}) => {
     const uri = imagen;
     const splitname = uri.split('/');
     const name = [...splitname].pop();
     console.log(name);
     const foto = {
         uri,
-        type:'image/jpeg',
+        type:type,
         name,
     }
     const formImagen = new FormData();
@@ -30,7 +36,7 @@ const registroFotoCloudinary = (imagen) => {
         method: 'POST',
         body: formImagen,
     }).then(response => response.json());
-    };  
+};  
 function* sagaRegistro(values){
     try {
         const registro = yield call(registroenFirebase,values.datos);
@@ -57,7 +63,8 @@ const getemail= ({rut,password})=>{
 
 const loginFirebasebase = ({correo,password}) => auth
 .signInWithEmailAndPassword(correo, password)
-.then((success)=>success);
+.then((success)=>success)
+.catch((error)=>ToastAndroid.show((error+""=='[Error: The password is invalid or the user does not have a password.]' ? "La contraseña no es correcta": "Ha ocurrido un error"),ToastAndroid.SHORT))
 function* sagaLogin(values){
     try {
         console.log(values);
@@ -71,13 +78,13 @@ function* sagaLogin(values){
 const RegisterPostBD = (values) =>
     database.ref('Archivos/' + Date.now()).set({
         Archivo: values.profileImageurl,
-        Audio: '',
-        Comentario: values.description,
+        Audio: values.profileAudiourl,
+        Comentario: (values.description ? values.description : ''),
         Fecha: values.DateTime,
         Institucion:{
-            Ambulancias:true,
-            Bomberos:true,
-            Carabineros: true,
+            Ambulancias:(values.chkAmbulancias ? true : false),
+            Bomberos:(values.chkBomberos ? true : false),
+            Carabineros: (values.chkCarabineros ? true : false),
         },
         Ubicacion:{
             Latitud: -27.00667,
@@ -88,11 +95,21 @@ const RegisterPostBD = (values) =>
 function* sagaSubirPublicacion(values){
     try {
         console.log(values);
-        const imagen = values.values.captures.uri; 
-        const upload = yield call(registroFotoCloudinary,imagen);
+        var imagen,upload;
+        if(values.values.captures.uri !== null){
+            imagen = values.values.captures.uri;
+            upload = yield call(registroFotoCloudinary,{imagen:imagen,type:'image/jpeg'});
+        }
+        var upload2='',audio='',profileAudiourl='';
+        if(values.values.Audio!=''){
+            audio = values.values.Audio.uri; 
+            upload2 = yield call(registroFotoCloudinary,{imagen:audio,type:'audio/mp3'});
+            console.log(upload2);
+            profileAudiourl = upload2.secure_url;
+        }
         const profileImageurl = upload.secure_url;
-        const {DateTime,description} = values.values;
-        const uploadPost = yield call(RegisterPostBD,{DateTime,description,profileImageurl});
+        const {DateTime,description, chkAmbulancias, chkBomberos, chkCarabineros} = values.values;
+        const uploadPost = yield call(RegisterPostBD,{profileAudiourl,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});
     } catch (error) {
         console.log(error);
     }

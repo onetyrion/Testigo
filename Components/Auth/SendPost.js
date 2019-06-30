@@ -6,19 +6,24 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import { stylesSendPost } from './StylesAuth';
 import { connect } from 'react-redux';
 import { blur } from 'redux-form';
-import SendPostForm from '../form/SendPostForm';
+import SendPostForm from './form/SendPostForm';
 import { DocumentPicker } from 'expo';
 import LocationView from "react-native-location-view";
-import { Overlay } from 'react-native-elements';
+import { Overlay, CheckBox, Text, Card, Input } from 'react-native-elements';
 import { actionCargarImagenPublicacion, actionSubirPublicacion } from '../../Store/ACTIONS';
-
+/**
+ * @class contiene las funciones de el envio de una denuncia 
+ */
 class SendPost extends Component {
   constructor(props) {
     super(props);
-    state = {captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,checked:false,checked1:false,checked2:false}
+    state = {captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false}
   }
   SendPost = (values) => {
-    values={...values,captures: this.state.captures[0],Audio:this.state.AudioData,DateTime:this.state.TextDatetime};
+    captures= (this.state.captures[0] ? this.state.captures[0]: '');
+    audio=(this.state.AudioData ? this.state.AudioData : '');
+    datetime=(this.state.TextDatetime ? this.state.TextDatetime : '');
+    values={...values,captures: captures,Audio:audio,DateTime:datetime,chkAmbulancias:this.state.chkAmbulancias,chkBomberos:this.state.chkBomberos,chkCarabineros:this.state.chkCarabineros};
     console.log(values);
     this.props.subirPublicacion(values);
   };
@@ -73,7 +78,7 @@ class SendPost extends Component {
           mode={"datetime"}
           onCancel={this.hideDateTimePicker}
           />
-        {/*
+        
         <Overlay
         isVisible={this.state.isVisible}
         onBackdropPress={() => this.setState({ isVisible: false })}
@@ -82,19 +87,19 @@ class SendPost extends Component {
         >
           <View>
           <CheckBox
-            checked={this.state.checked}
+            checked={this.state.chkAmbulancias}
             title="Ambulancias"
-            onPress={() => this.setState({checked: !this.state.checked})}
+            onPress={() => this.setState({chkAmbulancias: !this.state.chkAmbulancias})}
           />
           <CheckBox
-            checked={this.state.checked1}
+            checked={this.state.chkCarabineros}
             title="Carabineros"
-            onPress={() => this.setState({checked1: !this.state.checked1})}
+            onPress={() => this.setState({chkCarabineros: !this.state.chkCarabineros})}
           />
           <CheckBox
-            checked={this.state.checked2}
+            checked={this.state.chkBomberos}
             title="Bomberos"
-            onPress={() => this.setState({checked2: !this.state.checked2})}
+            onPress={() => this.setState({chkBomberos: !this.state.chkBomberos})}
           />
           <View style={{padding:5,flexDirection:'row'}}>
             <TouchableOpacity onPress={()=>{this.setState({ isVisible: false })}} style={stylesSendPost.button1}>
@@ -106,7 +111,7 @@ class SendPost extends Component {
             </View>
           </View>                 
         </Overlay>        
-        <Card style={stylesSendPost.card}>
+        {/* <Card style={stylesSendPost.card}>
           <Text onPress={this.showDateTimePicker}>{this.state.TextDatetime}</Text>
           <Input
           label={"Mensaje:"}
