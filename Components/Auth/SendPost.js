@@ -11,6 +11,7 @@ import { DocumentPicker } from 'expo';
 import LocationView from "react-native-location-view";
 import { Overlay, CheckBox, Text, Card, Input } from 'react-native-elements';
 import { actionCargarImagenPublicacion, actionSubirPublicacion } from '../../Store/ACTIONS';
+import Gallery from "./Camera/gallery.component";
 /**
  * @class contiene las funciones de el envio de una denuncia 
  */
@@ -64,6 +65,11 @@ class SendPost extends Component {
     const captures = this.state.captures;
     return (
       <View style={stylesSendPost.imageContainer}>
+        <ScrollView 
+          horizontal={true}
+          style={[stylesSendPost.images]} >
+          <Gallery captures={captures}/>
+        </ScrollView>
         <SendPostForm 
           DateTimePickerisVisible={this.DateTimePickerShow}
           DateTimePickerText={this.state.TextDatetime}

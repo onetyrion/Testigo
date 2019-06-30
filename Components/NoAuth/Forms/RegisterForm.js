@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import { View,TextInput,StyleSheet, ToastAndroid, TouchableOpacity } from 'react-native';
 import { CheckBox,Icon,Text,Button } from 'react-native-elements';
 import {Field, reduxForm} from 'redux-form';
-import {auth} from '../../../Store/Services/Firebase';
 import { stylesRegister, stylesLogin } from '../StylesNoAuth';
+import { validate as validateRUT, clean, format } from'rut.js';
 /**
  * 
  * @class Contiene el formulario y validación de este mismo del Register.  
@@ -54,8 +54,12 @@ const validate =(values)=>{
     const errors ={};
     if(!values.rut){
         errors.rut = 'requerido';
-    } else if(values.rut.length > 12){
-        errors.nombre = 'deben ser maximo 12 caracteres';
+    }else{
+        values.rut = clean(values.rut);
+        values.rut = format(values.rut);
+        if (!validateRUT(values.rut)) {
+            errors.rut = 'Rut invalido'
+        }
     }
     if(!values.ndoc){
         errors.ndoc = 'requerido';

@@ -54,7 +54,6 @@ export default class CameraPage extends React.Component {
     handleShortCapture = async () => {
         const photoData = await this.camera.takePictureAsync();
         this.setState({ capturing: false, captures: [photoData, ...this.state.captures] });
-        this.props.navigation.navigate("SendPost",{"PhotoData":this.state.captures});
     };
 
     /**
@@ -63,7 +62,6 @@ export default class CameraPage extends React.Component {
     handleLongCapture = async () => {
         const videoData = await this.camera.recordAsync();
         this.setState({ capturing: false, captures: [videoData, ...this.state.captures] });
-        this.props.navigation.navigate("SendPost",{"PhotoData":this.state.captures});
     };
     /**
      * @description método nativo de react native, se ejecuta despues de renderizar el componenete, pregunta los permisos de acceso a camara y audio.
@@ -80,12 +78,11 @@ export default class CameraPage extends React.Component {
      */
     _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-          allowsEditing: false,
+          allowsEditing: true,
         }); 
         
         if (!result.cancelled) {
           this.setState({ capturing: false, captures: [result, ...this.state.captures] });
-          this.props.navigation.navigate("SendPost",{"PhotoData":this.state.captures});
         }
       };
       /**

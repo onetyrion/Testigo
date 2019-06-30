@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, Text,Button,TextInput,TouchableOpacity,StyleSheet } from 'react-native';
 import {Field, reduxForm} from 'redux-form';
 import { stylesLogin } from '../StylesNoAuth';
+import { validate as validateRUT, clean, format } from'rut.js';
 /**
  * 
  * @class Contiene el formulario y validación de este mismo del Login. 
@@ -27,10 +28,13 @@ const validate =(values)=>{
     const errors ={};
     if(!values.rut){
         errors.rut = 'requerido';
-    }
-    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)){
-    //     errors.correo = 'correo invalido';
-    // } 
+    }else{
+        values.rut = clean(values.rut);
+        values.rut = format(values.rut);
+        if (!validateRUT(values.rut)) {
+            errors.rut = 'Rut invalido'
+        }
+    } 
     if(!values.password){
         errors.password = 'requerido';
     }else if(values.password.length <5){

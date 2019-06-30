@@ -11,6 +11,7 @@ import { View,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-native';
 const registroenFirebase = (values) => auth
     .createUserWithEmailAndPassword(values.correo, values.password)
     .then(success => success);
+
 const RegisterBD = ({uid,email,rut,ndoc}) =>
     database.ref('Usuarios/' + uid).set({
         rut: rut,
@@ -46,7 +47,11 @@ function* sagaRegistro(values){
         const { datos: { rut,ndoc } } = values;
         yield call( RegisterBD, { uid, email, rut,ndoc} );
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        if (error.toString().indexOf("The email address is already in use by another account.")!= -1) {
+            ToastAndroid.show("El email ingresado ya esta registrado.",ToastAndroid.SHORT);    
+        }
+        ToastAndroid.show("Ha ocurrido un error, intentelo más tarde.",ToastAndroid.SHORT);
     }
 }
 const getemail= ({rut,password})=>{
@@ -64,15 +69,23 @@ const getemail= ({rut,password})=>{
 const loginFirebasebase = ({correo,password}) => auth
 .signInWithEmailAndPassword(correo, password)
 .then((success)=>success)
-.catch((error)=>ToastAndroid.show((error+""=='[Error: The password is invalid or the user does not have a password.]' ? "La contraseña no es correcta": "Ha ocurrido un error"),ToastAndroid.SHORT))
+.catch((error)=>{
+    if (error.toString().indexOf("The password is invalid or the user does not have a password.")!= -1) {
+        console.log(error);
+        ToastAndroid.show("Credenciales incorrectas, por favor verifique sus datos.",ToastAndroid.SHORT); 
+    } else {
+        console.log(error);
+        ToastAndroid.show("Ha ocurrido un error, intentelo más tarde.",ToastAndroid.SHORT);
+    }
+});
 function* sagaLogin(values){
     try {
         console.log(values);
         yield call(getemail,values.datos);
-        //const resultado =yield call(loginFirebasebase,values.datos);
         
     } catch (error) {
         console.log(error);
+        ToastAndroid.show("Ha ocurrido un error, intentelo más tarde.",ToastAndroid.SHORT);
     }
 }
 const RegisterPostBD = (values) =>
