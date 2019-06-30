@@ -21,9 +21,14 @@ class SendPost extends Component {
     state = {captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false}
   }
   SendPost = (values) => {
-    captures= (this.state.captures[0] ? this.state.captures[0]: '');
+    captures= [];
     audio=(this.state.AudioData ? this.state.AudioData : '');
     datetime=(this.state.TextDatetime ? this.state.TextDatetime : '');
+    if (this.state.captures[0]) {
+      this.state.captures.forEach(element => {
+        captures=[element.uri,...captures];
+      });
+    }
     values={...values,captures: captures,Audio:audio,DateTime:datetime,chkAmbulancias:this.state.chkAmbulancias,chkBomberos:this.state.chkBomberos,chkCarabineros:this.state.chkCarabineros};
     console.log(values);
     this.props.subirPublicacion(values);

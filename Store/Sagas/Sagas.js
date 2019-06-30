@@ -107,22 +107,49 @@ const RegisterPostBD = (values) =>
     });
 function* sagaSubirPublicacion(values){
     try {
-        console.log(values);
-        var imagen,upload;
-        if(values.values.captures.uri !== null){
-            imagen = values.values.captures.uri;
-            upload = yield call(registroFotoCloudinary,{imagen:imagen,type:'image/jpeg'});
+        var upload,type;
+        imagenSubidas = [];
+        for (let index = 0; index < values.values.captures.length; index++) {
+            const uri = values.values.captures[index];
+            const splitname = uri.split('/');
+            const name = [...splitname].pop();
+            const namesplit = name.split('.');
+            const tipo = [...namesplit].pop();
+            if (tipo == 'jpg' || tipo == 'jpeg' || tipo == 'png') {
+                type='image/jpeg';
+            }else if(tipo == 'mp4'){
+                type='video/mp4';
+            }
+            upload = yield call(registroFotoCloudinary,{imagen:values.values.captures[index],type:'image/jpeg'});
+            imagenSubidas=[upload.secure_url,...imagenSubidas];
         }
+        // console.log("\n 11111");
+        // console.log(imagenSubidas);
         var upload2='',audio='',profileAudiourl='';
         if(values.values.Audio!=''){
             audio = values.values.Audio.uri; 
             upload2 = yield call(registroFotoCloudinary,{imagen:audio,type:'audio/mp3'});
-            console.log(upload2);
+            // console.log(upload2);
             profileAudiourl = upload2.secure_url;
         }
-        const profileImageurl = upload.secure_url;
+        const profileImageurl = imagenSubidas;
         const {DateTime,description, chkAmbulancias, chkBomberos, chkCarabineros} = values.values;
-        const uploadPost = yield call(RegisterPostBD,{profileAudiourl,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});
+        const uploadPost = yield call(RegisterPostBD,{profileAudiourl,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});        
+        console.log(uploadPost);
+        // if(values.values.captures !== null){
+        //     imagen = values.values.captures[0].uri;
+        //     upload = yield call(registroFotoCloudinary,{imagen:imagen,type:'image/jpeg'});
+        // }
+        // var upload2='',audio='',profileAudiourl='';
+        // if(values.values.Audio!=''){
+        //     audio = values.values.Audio.uri; 
+        //     upload2 = yield call(registroFotoCloudinary,{imagen:audio,type:'audio/mp3'});
+        //     console.log(upload2);
+        //     profileAudiourl = upload2.secure_url;
+        // }
+        // const profileImageurl = upload.secure_url;
+        // const {DateTime,description, chkAmbulancias, chkBomberos, chkCarabineros} = values.values;
+        // const uploadPost = yield call(RegisterPostBD,{profileAudiourl,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});
     } catch (error) {
         console.log(error);
     }
