@@ -28,6 +28,15 @@ const reducerImagenPublicacion = (state = { imagen: null }, action) => {
         return state;
     }
   };
+const reducerMarkers= (state = [], action) => {
+    switch (action.type) {
+      case CONSTANTS.ANADIR_MARKERS:
+          //state = {markers: action.values}
+        return [...action.values];
+      default:
+        return state;
+    }
+};
 const reducerPrueba = (state=[0],action) => {
     switch (action.type) {
         case 'LOADING':
@@ -40,6 +49,7 @@ const reducerPrueba = (state=[0],action) => {
 const reducers = combineReducers({
     reducerSesion,
     form,
+    reducerMarkers,
     reducerImagenPublicacion,
     reducerPrueba
 });

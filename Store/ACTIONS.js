@@ -26,7 +26,11 @@ export const actionCargarImagenPublicacion = imagen => ({
     type: CONSTANTS.CARGAR_IMAGEN_PUBLICACION,
     imagen,
   });
-  export const actionSubirPublicacion = values => ({
+export const actionSubirPublicacion = values => ({
     type: CONSTANTS.SUBIR_PUBLICACION,
+    values,
+  });
+export const actionAnadirMarkers = values => ({
+    type: CONSTANTS.ANADIR_MARKERS,
     values,
   });

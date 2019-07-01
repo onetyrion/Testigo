@@ -1,11 +1,12 @@
 import React from "react"; 
 import { StyleSheet,ActivityIndicator, Text, View, Image } from "react-native"; 
-import { Constants, Location, Permissions,MapView,Marker  } from "expo"; 
+import { Constants, Location, Permissions,MapView  } from "expo"; 
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { stylesHome } from "./StylesAuth";
 import { database } from "../../Store/Services/Firebase";
 import { connect} from 'react-redux';
+import { actionAnadirMarkers } from "../../Store/ACTIONS";
 /**
  * @class Crea componente Home, Contiene vista del mapa, botón a camara, barra lateral.
  */
@@ -44,6 +45,7 @@ class Home extends React.Component {
                 }
             );
             this.props.GetMarkerLast();
+            console.log(this.props);
         } catch (error) {
             console.log(error)
         }
@@ -53,6 +55,7 @@ class Home extends React.Component {
      */
     componentDidMount(){
         this.setState({isready:true})
+        console.log(this.props.markers);
     }
     Logout(){
         dismiss();
@@ -67,7 +70,8 @@ class Home extends React.Component {
             this.state.lat && this.state.isready  ?
             <View style={stylesHome.container}>
                 <MapView
-                showsUserLocation={true} followUserLocation={true}
+                    showsUserLocation={true} 
+                    followUserLocation={true}
                     style={stylesHome.map}
                     initialRegion={{
                         latitude: this.state.lat,
@@ -75,7 +79,18 @@ class Home extends React.Component {
                         latitudeDelta:this.state.latitudeDelta,
                         longitudeDelta:this.state.longitudeDelta
                     }}
-                />
+                >
+                    {this.props.markers.length === 5 ? 
+                    this.props.markers.map(( values ) => {
+                        const lat = Object.values(values)[0].children_.root_.right.value.children_.root_.left.value.value_;
+                        const long = Object.values(values)[0].children_.root_.right.value.children_.root_.value.value_;
+                        return(<MapView.Marker coordinate={{latitude: lat,longitude:long}}
+                        />)
+                    })
+                    : null 
+
+                    }
+                </MapView>
                 <ActionButton buttonColor="#dc3545" onPress={()=>{navigate('Camera')}}
                 renderIcon={()=>{return <Icon name="md-camera" style={stylesHome.actionButtonIcon}/>}}>
                 </ActionButton>
@@ -93,15 +108,20 @@ class Home extends React.Component {
 const mapStateToProps = (state) => {
     return {
       prop: state.prop,
-      markers: state.markers
+      markers: state.reducerMarkers
     }
   }
   const mapDispatchToProps = (dispatch) => {
     return {
       GetMarkerLast: () => {
+        var markers = [];
         var ref = database.ref("Archivos").limitToLast(5).on("child_added", function(snapshot) {
-          console.log(snapshot);
+          markers = [snapshot,...markers];
+          if(markers.length === 5){
+                dispatch(actionAnadirMarkers(markers));
+          }
         });
+        console.log('fin');
       }
     }
   }
