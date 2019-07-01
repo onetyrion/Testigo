@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {takeEvery, call} from 'redux-saga/effects';
 import CONSTANTS from '../CONSTANTS';
 import { database, auth } from '../Services/Firebase';
-import { View,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-native';
+import { View,Alert,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-native';
 /**
  * 
  * @class Contiene los métodos que se conectan con Firebase
@@ -100,8 +100,8 @@ const RegisterPostBD = (values) =>
             Carabineros: (values.chkCarabineros ? true : false),
         },
         Ubicacion:{
-            Latitud: -27.00667,
-            Longitud: -70.01142,
+            Latitud: MapData.latitude,
+            Longitud: MapData.longitude,
         },
         id:Date.now(),
     });
@@ -133,9 +133,13 @@ function* sagaSubirPublicacion(values){
             profileAudiourl = upload2.secure_url;
         }
         const profileImageurl = imagenSubidas;
-        const {DateTime,description, chkAmbulancias, chkBomberos, chkCarabineros} = values.values;
-        const uploadPost = yield call(RegisterPostBD,{profileAudiourl,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});        
-        console.log(uploadPost);
+        const {navigate,DateTime,description, chkAmbulancias, chkBomberos,MapData, chkCarabineros} = values.values;
+        const uploadPost = yield call(RegisterPostBD,{profileAudiourl,MapData,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});        
+        ToastAndroid.show("Subido correctamente",ToastAndroid.SHORT);
+        Alert.alert(
+            'Subido correctamente...',
+         );
+        console.log(values);
         // if(values.values.captures !== null){
         //     imagen = values.values.captures[0].uri;
         //     upload = yield call(registroFotoCloudinary,{imagen:imagen,type:'image/jpeg'});
@@ -152,6 +156,9 @@ function* sagaSubirPublicacion(values){
         // const uploadPost = yield call(RegisterPostBD,{profileAudiourl,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});
     } catch (error) {
         console.log(error);
+        Alert.alert(
+            'Ha ocurrido un error...'
+         );
     }
 }
 export default function* funcionPrimaria(){

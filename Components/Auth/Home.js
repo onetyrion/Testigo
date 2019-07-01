@@ -4,10 +4,12 @@ import { Constants, Location, Permissions,MapView,Marker  } from "expo";
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { stylesHome } from "./StylesAuth";
+import { database } from "../../Store/Services/Firebase";
+import { connect} from 'react-redux';
 /**
  * @class Crea componente Home, Contiene vista del mapa, botón a camara, barra lateral.
  */
-export default class Home extends React.Component { 
+class Home extends React.Component { 
     /**
      * @description define en propiedad state latitud, longitud y sus respectivas Delta(Posicionamiento de la camara) como tambien isready.
      * @param {*} props propiedad nativa de React Native. contiene parametros heredados.
@@ -41,6 +43,7 @@ export default class Home extends React.Component {
                     this.setState({lat,long});
                 }
             );
+            this.props.GetMarkerLast();
         } catch (error) {
             console.log(error)
         }
@@ -83,4 +86,23 @@ export default class Home extends React.Component {
         ); 
     } 
 }
-/** @property {StyleSheet} stylesHome Contiene los estilos del contenedor mayor, el mapa y el botón */
+// var ref = db.ref("dinosaurs");
+// ref.orderByChild("weight").limitToLast(2).on("child_added", function(snapshot) {
+//   console.log(snapshot.key);
+// });
+const mapStateToProps = (state) => {
+    return {
+      prop: state.prop,
+      markers: state.markers
+    }
+  }
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      GetMarkerLast: () => {
+        var ref = database.ref("Archivos").limitToLast(5).on("child_added", function(snapshot) {
+          console.log(snapshot);
+        });
+      }
+    }
+  }
+  export default connect(mapStateToProps, mapDispatchToProps)(Home);

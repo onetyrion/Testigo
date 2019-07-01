@@ -12,13 +12,14 @@ import LocationView from "react-native-location-view";
 import { Overlay, CheckBox, Text, Card, Input } from 'react-native-elements';
 import { actionCargarImagenPublicacion, actionSubirPublicacion } from '../../Store/ACTIONS';
 import Gallery from "./Camera/gallery.component";
+import SendPostMap from './SendPostMap';
 /**
  * @class contiene las funciones de el envio de una denuncia 
  */
 class SendPost extends Component {
   constructor(props) {
     super(props);
-    state = {captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false}
+    state = {isVisibleMap:false,captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false}
   }
   SendPost = (values) => {
     captures= [];
@@ -29,9 +30,12 @@ class SendPost extends Component {
         captures=[element.uri,...captures];
       });
     }
-    values={...values,captures: captures,Audio:audio,DateTime:datetime,chkAmbulancias:this.state.chkAmbulancias,chkBomberos:this.state.chkBomberos,chkCarabineros:this.state.chkCarabineros};
+    MapData=this.state.MapData;
+    values={...values,MapData:MapData,captures: captures,Audio:audio,DateTime:datetime,chkAmbulancias:this.state.chkAmbulancias,chkBomberos:this.state.chkBomberos,chkCarabineros:this.state.chkCarabineros};
     console.log(values);
     this.props.subirPublicacion(values);
+    const { navigation } = this.props;
+    navigation.navigate("Home");
   };
 /**
  *  METHOD MODAL DATATIME PICKER
@@ -41,7 +45,7 @@ class SendPost extends Component {
   };
   DateTimePickerShow = () =>{
     this.setState({ isDateTimePickerVisible: !this.state.isDateTimePickerVisible });
-  }
+  };
 
   hideDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: false });
@@ -56,7 +60,10 @@ class SendPost extends Component {
     let result = await DocumentPicker.getDocumentAsync({});
     this.setState({AudioData:result});
     console.log(result);
-  }
+  };
+  showMapPicker = ({latitude,longitude}) =>{
+    this.setState({ isVisibleMap: !this.state.isVisibleMap,MapData:{latitude,longitude} });
+  };
   /**
    * Metodo nativo de react native y retorno de view
    */
@@ -70,12 +77,15 @@ class SendPost extends Component {
     const captures = this.state.captures;
     return (
       <View style={stylesSendPost.imageContainer}>
+        {this.state.isVisibleMap ? <SendPostMap style={{position:'abolute'}} showMapPicker={this.showMapPicker}/> : 
+        <View>
         <ScrollView 
           horizontal={true}
           style={[stylesSendPost.images]} >
           <Gallery captures={captures}/>
         </ScrollView>
         <SendPostForm 
+          showMapPicker={this.showMapPicker}
           DateTimePickerisVisible={this.DateTimePickerShow}
           DateTimePickerText={this.state.TextDatetime}
           photoData={this.state.captures[0]}
@@ -122,23 +132,8 @@ class SendPost extends Component {
             </View>
           </View>                 
         </Overlay>        
-        {/* <Card style={stylesSendPost.card}>
-          <Text onPress={this.showDateTimePicker}>{this.state.TextDatetime}</Text>
-          <Input
-          label={"Mensaje:"}
-          containerStyle={{marginTop:5}}
-          inputStyle={{height:120}}
-          multiline = {true}
-          maxLength = {340} />
-        </Card>
-        <ScrollView 
-          horizontal={true}
-          style={[stylesSendPost.images]} >
-            <Gallery captures={captures}/>
-        </ScrollView>
-        <TouchableOpacity onPress={()=>{}} style={stylesSendPost.button}>
-          <Text style={{color:'#fff'}}>Enviar</Text>
-        </TouchableOpacity> */}
+        </View>
+      }
       </View>
     );
   }

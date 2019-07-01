@@ -4,10 +4,10 @@ import {Provider} from 'react-redux';
 import store from './Store/Store';
 import Selection from './Selection';
 import Test from './Components/Test';
-
 // versión expo 2.18.4
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
+import SendPostMap from './Components/Auth/SendPostMap';
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 YellowBox.ignoreWarnings(['Failed prop type']);

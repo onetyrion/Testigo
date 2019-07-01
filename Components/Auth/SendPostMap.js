@@ -5,23 +5,22 @@ import {View} from "react-native";
 /**
  * @class contiene el mapa para elegir la ubicación dentro de la denuncia
  */
-export default class SelectLocationScreen extends React.Component {
+export default class SendPostMap extends React.Component {
   state = {
 
   };
-functionLocationView = (values) => {
-
-}
   render() {
+    const selectLocation = this.props.showMapPicker;
+    console.log(this.props);
     return(
-        <LocationView
-          apiKey={"AIzaSyAJKyjh4mUAuJrbKM7yosg9aCjEhZqkXeI"}
-          onLocationSelect={(values)=>{console.log(values)}}
-          initialLocation={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-          }}
-        />
+      <LocationView
+        apiKey={"AIzaSyAJKyjh4mUAuJrbKM7yosg9aCjEhZqkXeI"}
+        onLocationSelect={(values)=>{console.log(values);selectLocation(values);}}
+        initialLocation={{
+          latitude: -27.36638115795976,
+          longitude: -70.33235790207982,
+        }}
+      />
     );
   }
 }

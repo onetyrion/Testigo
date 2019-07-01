@@ -73,7 +73,7 @@ const fieldMap = (props) => {
     //console.log(props.MapsData)
     return(
         <View >
-            <TouchableOpacity onPress={props.MapVisible}>
+            <TouchableOpacity onPress={props.showMapPicker}>
             <Text 
             onChangeText={props.input.onChange}
             placeholder={props.pc}
@@ -108,7 +108,7 @@ const validate =(values,props)=>{
             <Field name="Audio" component={fieldAudio} AudioData={props.AudioData} AudioPicker={props.AudioPicker}/>
             <Field name="datetime" component={fieldDateTime} txtDate={props.DateTimePickerText} modal={props.DateTimePickerisVisible} pc='Fecha y hora'/>
             <Field name="description" component={fieldNombre} pc='Ingrese descripción de lo ocurrido'/>
-            {/* <Field name="ubicacion" component={fieldMap} MapVisible={props.MapVisible} MapsData={props.MapsData} pc='Ingrese donde ocurrió'/> */}
+            <Field name="ubicacion" component={fieldMap} showMapPicker={props.showMapPicker} MapsData={props.MapsData} pc='Ingrese donde ocurrió'/>
             <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.SendPost,)}>
                 <Text style={{color: "#fff",fontSize:15}}>Enviar denuncia</Text>
             </TouchableOpacity>            
