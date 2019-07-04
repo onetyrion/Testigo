@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text,Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { auth } from './Store/Services/Firebase';
 import RoutesNoAuths from './Components/NoAuth/RoutesNoAuth';
@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch) => {
             // dispatch(actionCreator)
             auth.onAuthStateChanged(function(usuario) {
                 if (usuario) {
-                  console.log(usuario);
+                    console.log(usuario);
                   dispatch(actionEstablecerSesion(usuario));
                   dispatch(actionLoading(true));
                 } else {
@@ -58,6 +58,10 @@ const mapDispatchToProps = (dispatch) => {
                     dispatch(actionLoading(true));
                 }
               });
+        },
+        verificarEmail: () => {
+            user = auth.currentUser;
+            user.sendEmailVerification();
         }
     }
 }

@@ -49,6 +49,9 @@ export const stylesSendPost = StyleSheet.create({
   }
 });
 export const stylesProfile = StyleSheet.create({
+    container:{
+      flex:1,
+    },
     header:{
       backgroundColor: "#00BFFF",
       height:200,

@@ -7,6 +7,9 @@ import { stylesLogin } from './StylesNoAuth';
 import { connect} from 'react-redux';
 import LoginForm from './Forms/LoginForm';
 import { actionLOGIN } from '../../Store/ACTIONS';
+import ProfileEmailForm from '../Auth/form/ProfileEmailForm';
+import { Overlay } from 'react-native-elements';
+import { auth } from '../../Store/Services/Firebase';
 
 /**
  * @class contiene view del login y funcionabilidad anexas a este
@@ -15,7 +18,7 @@ import { actionLOGIN } from '../../Store/ACTIONS';
 class Login extends Component {
   constructor(props) {
     super(props),
-    this.state={fontLoaded: false}
+    this.state={fontLoaded: false,CorreoVisible:false}
   }
   static navigationOptions = {
     header:null
@@ -29,6 +32,10 @@ class Login extends Component {
   SignInUser = (values) => {
     this.props.login(values);
   }
+  CambiarContrasena = (values) => {
+    this.props.ChangePassword(values.email);
+    this.setState({CorreoVisible: false});
+  }
   render() {
     const {navigate} = this.props.navigation;
     const {push} = this.props.navigation;
@@ -36,32 +43,50 @@ class Login extends Component {
       <View style={stylesLogin.container}>
         <KeyboardAvoidingView style={stylesLogin.container} behavior="padding" enabled>
           {this.state.fontLoaded ? ( <Text style={stylesLogin.text}> Testigo </Text>):null}
-       
         <Image source={icon} style={stylesLogin.img}/> 
         <LoginForm login={this.SignInUser} />
-        {/* <TextInput placeholder="Ingrese su RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesLogin.textInput}/>
-        <TextInput placeholder="Ingrese su Contraseña" placeholderTextColor="#b0b0b0" style={stylesLogin.textInput2}/>
-        <TouchableOpacity style={stylesLogin.button}>
-          <Text style={{color: "#fff",fontSize:15}} onPress={()=>{push('RoutesAuth')}}>Iniciar Sesión</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity style={{marginTop:10}} onPress={()=>{navigate("SignUp")}}>  
           <Text style={{color: "#00B4DB",fontSize:15}}>Registrarse</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={{marginTop:160}} onPress={()=>{this.setState({CorreoVisible:!this.state.CorreoVisible})}}>  
+          <Text style={{color: "#808080",fontSize:13}}>Restablecer Contraseña</Text>
+        </TouchableOpacity>
         </KeyboardAvoidingView>
+        <Overlay
+        isVisible={this.state.CorreoVisible}
+        onBackdropPress={() => this.setState({ CorreoVisible: false })}
+        width="auto"
+        height="auto"
+        >
+          <View style={{marginBottom: 22}}>
+          <ProfileEmailForm ChangeEmail={this.CambiarContrasena}/>
+          </View>
+        </Overlay>
       </View>
     );
   } 
 }
 const mapStateToProps = (state) => {
   return {
-    prop: state.prop
+    prop: state.prop,
+    usuario: state.reducerSesion,
   }
 }
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (datos) => {
       dispatch(actionLOGIN(datos))
-    }
+    },    
+    ChangePassword:(emailAddress) => { 
+      auth.sendPasswordResetEmail(emailAddress).then(function() {
+        console.log("Email Enviado");
+        Alert.alert(
+          'Se ha enviado un correo para restablecer la contraseña...',
+       );
+      }).catch(function(error) {
+        console.log(error)
+      });
+    },  
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

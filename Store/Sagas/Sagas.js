@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {takeEvery, call} from 'redux-saga/effects';
+import {takeEvery, call, put} from 'redux-saga/effects';
 import CONSTANTS from '../CONSTANTS';
 import { database, auth } from '../Services/Firebase';
 import { View,Alert,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-native';
@@ -7,18 +7,27 @@ import { View,Alert,TouchableOpacity,StyleSheet,ToastAndroid } from 'react-nativ
  * 
  * @class Contiene los métodos que se conectan con Firebase
  */
-
-const registroenFirebase = (values) => auth
-    .createUserWithEmailAndPassword(values.correo, values.password)
-    .then(success => success);
-
-const RegisterBD = ({uid,email,rut,ndoc}) =>
-    database.ref('Usuarios/' + uid).set({
-        rut: rut,
-        ndoc: ndoc,
-        email: email 
-    });
-
+var usuario = null;
+const registroenFirebase = (values) => {
+    var user=null;
+    auth.createUserWithEmailAndPassword(values.correo, values.password)  
+    .then(function () {
+        user = auth.currentUser;
+        user.sendEmailVerification();
+      })
+    .then(function () {
+        user.updateProfile({
+          displayName: values.rut.toString(),
+        });
+      })
+    .then(function () {
+        database.ref('Usuarios/' + user.uid).set({
+            rut: values.rut,
+            ndoc: values.ndoc,
+            email: values.correo 
+        });
+    })
+};
 const registroFotoCloudinary = ({imagen,type}) => {
     const uri = imagen;
     const splitname = uri.split('/');
@@ -40,12 +49,7 @@ const registroFotoCloudinary = ({imagen,type}) => {
 };  
 function* sagaRegistro(values){
     try {
-        const registro = yield call(registroenFirebase,values.datos);
-        //console.log(registro.user);
-        const {user:{email, uid}} = registro;
-        //console.log(values)
-        const { datos: { rut,ndoc } } = values;
-        yield call( RegisterBD, { uid, email, rut,ndoc} );
+        yield call(registroenFirebase,values.datos);
     } catch (error) {
         console.log(error);
         if (error.toString().indexOf("The email address is already in use by another account.")!= -1) {
@@ -82,7 +86,6 @@ function* sagaLogin(values){
     try {
         console.log(values);
         yield call(getemail,values.datos);
-        
     } catch (error) {
         console.log(error);
         ToastAndroid.show("Ha ocurrido un error, intentelo más tarde.",ToastAndroid.SHORT);
@@ -140,20 +143,6 @@ function* sagaSubirPublicacion(values){
             'Subido correctamente...',
          );
         console.log(values);
-        // if(values.values.captures !== null){
-        //     imagen = values.values.captures[0].uri;
-        //     upload = yield call(registroFotoCloudinary,{imagen:imagen,type:'image/jpeg'});
-        // }
-        // var upload2='',audio='',profileAudiourl='';
-        // if(values.values.Audio!=''){
-        //     audio = values.values.Audio.uri; 
-        //     upload2 = yield call(registroFotoCloudinary,{imagen:audio,type:'audio/mp3'});
-        //     console.log(upload2);
-        //     profileAudiourl = upload2.secure_url;
-        // }
-        // const profileImageurl = upload.secure_url;
-        // const {DateTime,description, chkAmbulancias, chkBomberos, chkCarabineros} = values.values;
-        // const uploadPost = yield call(RegisterPostBD,{profileAudiourl,DateTime,description,profileImageurl,chkAmbulancias,chkBomberos,chkCarabineros});
     } catch (error) {
         console.log(error);
         Alert.alert(
@@ -161,9 +150,61 @@ function* sagaSubirPublicacion(values){
          );
     }
 }
+function* sagaCambiarEmail(values){
+    try{
+        console.log(values);
+        var user = auth.currentUser;
+        if (!user.emailVerified) {
+            console.log("valid")
+            Alert.alert('Email no verificado, Revisa tu bandeja de entrada...');
+            user.sendEmailVerification();
+        }else{
+            database.ref('Usuarios/' + user.uid).update({
+                "email": values.values
+                });
+            user.updateEmail(values.values)  
+            .then(function(userRecord) {
+                // See the UserRecord reference doc for the contents of userRecord.
+                //auth.signOut();
+                console.log("Successfully updated user", userRecord);
+                auth.signOut();
+            })
+            .catch(function(error) {
+                console.log("Error updating user:", error);
+            });
+            Alert.alert('Correo cambiado, por favor inicie sesión denuevo...');
+        }
+    }catch(error){
+        // An error happened.
+        const value = {value:error};
+        yield put({ type: 'CAMBIAR_CORREO', value });
+        Alert.alert('Ha ocurrido un error mientras se cambiaba el email...');
+        console.log(error);
+    }
+}
+function* sagaObtenerPerfil(){
+    try{
+        var user = auth.currentUser;
+        var name, email, photoUrl, uid, emailVerified;
+        if (user != null) {
+            name = user.displayName;
+            email = user.email;
+            photoUrl = user.photoURL;
+            emailVerified = user.emailVerified;
+            uid = user.uid; 
+            yield put({ type: 'OBTENER_PERFIL',value:{name,email,emailVerified,uid}});
+            console.log("error");
+          }
+    }catch(error){
+        // An error happened.
+        console.log(error)
+    }
+}
 export default function* funcionPrimaria(){
     yield takeEvery(CONSTANTS.REGISTRO,sagaRegistro);
     yield takeEvery(CONSTANTS.LOGIN,sagaLogin);
     yield takeEvery(CONSTANTS.SUBIR_PUBLICACION,sagaSubirPublicacion)
+    yield takeEvery(CONSTANTS.CAMBIAR_EMAIL,sagaCambiarEmail)
+    yield takeEvery(CONSTANTS.Obtener_Perfil,sagaObtenerPerfil)
     console.log('desde nuestra función generadora');
 }

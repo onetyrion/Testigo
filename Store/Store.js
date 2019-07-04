@@ -8,15 +8,33 @@ import CONSTANTS from './CONSTANTS';
  * 
  * @class clase principal de redux libreria que almacena un contenedor predecible del estado de aplicaciones a través de actions,reducers,y store.
  */
-const reducerSesion = (state=null,action) =>{
-    switch(action.type){
-        case CONSTANTS.ESTABLECERSESION:
-            return {...action.usuario};
-        case CONSTANTS.CERRARSESION:
-            return null;
-        default:
-            return state;
-    }
+const reducerSesion = (state={usuario:null},action) =>{
+  switch(action.type){
+    case CONSTANTS.ESTABLECERSESION:
+      return {usuario : action.datos };
+    case CONSTANTS.CERRARSESION:
+      return null;
+    default:
+      return state;
+  }
+}
+const reducerPerfil = (state=null,action) => {
+  switch (action.type) {
+    case "CAMBIAR_CORREO":
+      console.log(action);
+      return {...action.value};
+    default:
+      return state;
+  }
+}
+const reducerObtenerPerfil = (state=null,action) => {
+  switch (action.type) {
+    case "OBTENER_PERFIL":
+      console.log(action);
+      return null;
+    default:
+      return state;
+  }
 }
 const reducerImagenPublicacion = (state = { imagen: null }, action) => {
     switch (action.type) {
@@ -29,26 +47,28 @@ const reducerImagenPublicacion = (state = { imagen: null }, action) => {
     }
   };
 const reducerMarkers= (state = [], action) => {
-    switch (action.type) {
-      case CONSTANTS.ANADIR_MARKERS:
-          //state = {markers: action.values}
-        return [...action.values];
-      default:
-        return state;
-    }
+  switch (action.type) {
+    case CONSTANTS.ANADIR_MARKERS:
+      //state = {markers: action.values}
+      return [...action.values];
+    default:
+      return state;
+  }
 };
 const reducerPrueba = (state=[0],action) => {
     switch (action.type) {
         case 'LOADING':
-            return [action.datos];
+          return [action.datos];
     
         default:
-            return state;
+          return state;
     }
 };
 const reducers = combineReducers({
     reducerSesion,
     form,
+    reducerPerfil,
+    reducerObtenerPerfil,
     reducerMarkers,
     reducerImagenPublicacion,
     reducerPrueba

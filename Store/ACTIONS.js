@@ -13,10 +13,12 @@ export const actionLOGIN = datos => ({
     datos
 });
 export const actionEstablecerSesion = datos =>({
-    type: CONSTANTS.ESTABLECERSESION
+    type: CONSTANTS.ESTABLECERSESION,
+    datos
 });
 export const actionCerrarSesion = datos =>({
-    type: CONSTANTS.CERRARSESION
+    type: CONSTANTS.CERRARSESION,
+    datos
 });
 export const actionLoading = datos =>({
     type: CONSTANTS.LOADING,
@@ -33,4 +35,12 @@ export const actionSubirPublicacion = values => ({
 export const actionAnadirMarkers = values => ({
     type: CONSTANTS.ANADIR_MARKERS,
     values,
-  });
+});
+export const actionCambiarEmail = values => ({
+    type: CONSTANTS.CAMBIAR_EMAIL,
+    values,
+});
+export const actionObtenerPerfil = values => ({
+    type: CONSTANTS.Obtener_Perfil,
+    values,
+});

@@ -45,7 +45,6 @@ class Home extends React.Component {
                 }
             );
             this.props.GetMarkerLast();
-            console.log(this.props);
         } catch (error) {
             console.log(error)
         }
@@ -55,7 +54,6 @@ class Home extends React.Component {
      */
     componentDidMount(){
         this.setState({isready:true})
-        console.log(this.props.markers);
     }
     Logout(){
         dismiss();
@@ -84,7 +82,7 @@ class Home extends React.Component {
                     this.props.markers.map(( values ) => {
                         const lat = Object.values(values)[0].children_.root_.right.value.children_.root_.left.value.value_;
                         const long = Object.values(values)[0].children_.root_.right.value.children_.root_.value.value_;
-                        return(<MapView.Marker coordinate={{latitude: lat,longitude:long}}
+                        return(<MapView.Marker key={lat+""+long} coordinate={{latitude: lat,longitude:long}}
                         />)
                     })
                     : null 
@@ -101,10 +99,7 @@ class Home extends React.Component {
         ); 
     } 
 }
-// var ref = db.ref("dinosaurs");
-// ref.orderByChild("weight").limitToLast(2).on("child_added", function(snapshot) {
-//   console.log(snapshot.key);
-// });
+
 const mapStateToProps = (state) => {
     return {
       prop: state.prop,
@@ -118,10 +113,9 @@ const mapStateToProps = (state) => {
         var ref = database.ref("Archivos").limitToLast(5).on("child_added", function(snapshot) {
           markers = [snapshot,...markers];
           if(markers.length === 5){
-                dispatch(actionAnadirMarkers(markers));
+            dispatch(actionAnadirMarkers(markers));
           }
         });
-        console.log('fin');
       }
     }
   }

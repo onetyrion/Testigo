@@ -38,10 +38,10 @@ const ProfileEmailForm = (props)=>{
     // console.log(props);
     return(
     <View style={{justifyContent: 'center',alignItems:'center'}}>
-        <Text>Ingrese correo a cambiar</Text>
+        <Text>Ingrese correo</Text>
         <Field name="email" component={fieldNombre} pc='correo@correo.cl'/>
         <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.ChangeEmail)}>
-            <Text style={{color: "#fff",fontSize:15}}>Cambiar Email</Text>
+            <Text style={{color: "#fff",fontSize:15}}>Enviar</Text>
         </TouchableOpacity>            
     </View>
     )
