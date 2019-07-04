@@ -44,3 +44,7 @@ export const actionObtenerPerfil = values => ({
     type: CONSTANTS.Obtener_Perfil,
     values,
 });
+export const actionContacto = values => ({
+    type: CONSTANTS.ENVIAR_CONTACTO,
+    values,
+});

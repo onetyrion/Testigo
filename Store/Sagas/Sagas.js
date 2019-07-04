@@ -200,11 +200,27 @@ function* sagaObtenerPerfil(){
         console.log(error)
     }
 }
+function* sagaContacto(values){
+    console.log(values);
+    try {
+        var user = auth.currentUser;
+        database.ref('Contacto/' + Date.now().toString()).set({
+            "asunto": values.values.values.asunto,
+            "mensaje": values.values.values.mensaje,
+            "tipo": (values.values.btnHelp == 0 ? "Reporte de problemas" : "Servicio de ayuda"),
+            "usuario": user.uid
+        }).then(success => 
+            Alert.alert('Se ha enviado correctamente...'))
+    } catch (error) {
+        console.log(error);
+    }
+}
 export default function* funcionPrimaria(){
     yield takeEvery(CONSTANTS.REGISTRO,sagaRegistro);
     yield takeEvery(CONSTANTS.LOGIN,sagaLogin);
-    yield takeEvery(CONSTANTS.SUBIR_PUBLICACION,sagaSubirPublicacion)
-    yield takeEvery(CONSTANTS.CAMBIAR_EMAIL,sagaCambiarEmail)
-    yield takeEvery(CONSTANTS.Obtener_Perfil,sagaObtenerPerfil)
+    yield takeEvery(CONSTANTS.SUBIR_PUBLICACION,sagaSubirPublicacion);
+    yield takeEvery(CONSTANTS.CAMBIAR_EMAIL,sagaCambiarEmail);
+    yield takeEvery(CONSTANTS.Obtener_Perfil,sagaObtenerPerfil);
+    yield takeEvery(CONSTANTS.ENVIAR_CONTACTO,sagaContacto)
     console.log('desde nuestra función generadora');
 }

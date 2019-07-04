@@ -34,8 +34,8 @@ class SendPost extends Component {
     values={...values,MapData:MapData,captures: captures,Audio:audio,DateTime:datetime,chkAmbulancias:this.state.chkAmbulancias,chkBomberos:this.state.chkBomberos,chkCarabineros:this.state.chkCarabineros};
     console.log(values);
     this.props.subirPublicacion(values);
-    const { navigation } = this.props;
-    navigation.navigate("Home");
+    const {navigate} = this.props.navigation;
+    navigate("Home");
   };
 /**
  *  METHOD MODAL DATATIME PICKER
