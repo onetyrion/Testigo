@@ -97,18 +97,20 @@ const validate =(values,props)=>{
         console.log(props.imagen);
     if (!props.imagen) {
         errors.imagen = 'imagen es requerida';
-        }
+    }
+    if(!props.Mapdata){
+        errors.ubicacion = 'la ubicación es requerida'; 
+    }
     return errors;
     }
     const SendPostForms = (props)=>{
         // console.log(props);
         return(
-            <View style={{justifyContent: 'center',alignItems:'center'}}>
-            <Field name="photo" component={fieldPhoto} photoData={props.photoData}/>
+            <View style={{marginTop:130,justifyContent: 'center',alignItems:'center'}}>
             <Field name="Audio" component={fieldAudio} AudioData={props.AudioData} AudioPicker={props.AudioPicker}/>
             <Field name="datetime" component={fieldDateTime} txtDate={props.DateTimePickerText} modal={props.DateTimePickerisVisible} pc='Fecha y hora'/>
             <Field name="description" component={fieldNombre} pc='Ingrese descripción de lo ocurrido'/>
-            <Field name="ubicacion" component={fieldMap} showMapPicker={props.showMapPicker} MapsData={props.MapsData} pc='Ingrese donde ocurrió'/>
+            <Field name="ubicacion" component={fieldMap} showMapPicker={props.showMapPicker} MapsData={props.Mapdata} pc='Ingrese donde ocurrió'/>
             <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.SendPost,)}>
                 <Text style={{color: "#fff",fontSize:15}}>Enviar denuncia</Text>
             </TouchableOpacity>            

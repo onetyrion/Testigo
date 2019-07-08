@@ -12,7 +12,7 @@ export const stylesSendPost = StyleSheet.create({
     flex:0.2,
     width: winWidth,
     height:50,
-    position: "relative",
+    position: "absolute",
     marginTop: 50,
     paddingLeft: 5,
   },
