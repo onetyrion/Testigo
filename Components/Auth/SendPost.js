@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,Dimensions,Image,ScrollView,StyleSheet,TouchableOpacity } from 'react-native';
+import { View,Dimensions,Image,ScrollView,ActivityIndicator,StyleSheet,TouchableOpacity } from 'react-native';
 //import { Ionicons } from '@expo/vector-icons';
 //import Gallery from './Camera/gallery.component';
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -19,13 +19,14 @@ import SendPostMap from './SendPostMap';
 class SendPost extends Component {
   constructor(props) {
     super(props);
-    state = {isVisibleMap:false,captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false}
+    state = {isVisibleMap:false,captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false,uploading:false}
   }
 /**
    * @property SendPost redirige a un método de redux.
    * @param values contiene los valores del formulario.
  */
   SendPost = (values) => {
+    this.setState({uploading:true});
     captures= [];
     audio=(this.state.AudioData ? this.state.AudioData : '');
     datetime=(this.state.TextDatetime ? this.state.TextDatetime : '');
@@ -38,8 +39,10 @@ class SendPost extends Component {
     values={...values,MapData:MapData,captures: captures,Audio:audio,DateTime:datetime,chkAmbulancias:this.state.chkAmbulancias,chkBomberos:this.state.chkBomberos,chkCarabineros:this.state.chkCarabineros};
     console.log(values);
     this.props.subirPublicacion(values);
+    this.setState({uploading:false});
+
     const {navigate} = this.props.navigation;
-    navigate("Home");
+    navigate("First");
   };
 /**
  *  METHOD MODAL DATATIME PICKER
@@ -89,6 +92,7 @@ class SendPost extends Component {
   render() {
     const captures = this.state.captures;
     return (
+      !this.state.uploading ?
       <View style={stylesSendPost.imageContainer}>
         {this.state.isVisibleMap ? <SendPostMap style={{position:'abolute'}} showMapPicker={this.showMapPicker}/> : 
         <View>
@@ -99,6 +103,7 @@ class SendPost extends Component {
         </ScrollView>
         <SendPostForm 
           showMapPicker={this.showMapPicker}
+          Mapdata={this.state.MapData}
           DateTimePickerisVisible={this.DateTimePickerShow}
           DateTimePickerText={this.state.TextDatetime}
           photoData={this.state.captures[0]}
@@ -148,6 +153,7 @@ class SendPost extends Component {
         </View>
       }
       </View>
+      : <View style={stylesHome.container}><ActivityIndicator size="large" color="#dc3545" /><Text>Subiendo Archivos</Text> </View>
     );
   }
 }
