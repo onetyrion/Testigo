@@ -20,17 +20,26 @@ class Contact extends Component {
         color:"#dc3545"
     };
     this.updateIndex = this.updateIndex.bind(this)
-  }
+  }  
+  /**
+  * @property contactsubmit redirige a un método de redux.
+  * @param values contiene los valores del formulario.
+  */
   contactsubmit = (values) => {
     values = {values,btnHelp:this.state.selectedIndex};
     this.props.contactsubmitform(values);
     const {navigate} = this.props.navigation;
     navigate("Home");
-    }
+  }
+/**
+ * @property updateIndex cambia el estado para seleccionar la funcionabilidad del botón doble 
+ */
   updateIndex (selectedIndex) {
     this.setState({selectedIndex,color:"#fff"})
   }
-
+  /**
+   * @property render contiene la vista del componente.
+   */
   render() {
     const component1 = () => <Text style={this.state.selectedIndex == 0 ?{fontSize:15,fontWeight:"bold",color:"#fff"}:{fontSize:15,fontWeight:"bold",color:"#000000"}}>Reporte de problemas</Text>
     const component2 = () => <Text style={this.state.selectedIndex == 1 ?{fontSize:15,fontWeight:"bold",color:"#fff"}:{fontSize:15,fontWeight:"bold",color:"#000000"}}>Servicio de ayuda</Text>
@@ -53,18 +62,26 @@ class Contact extends Component {
     );
   }
 }
-
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
 const mapStateToProps = state => ({
   props: state,
   imagen: state.reducerImagenPublicacion,
 });
-
+/**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
 const mapDispatchToProps = dispatch => ({
   contactsubmitform:(values)=>{
     console.log("here");
     dispatch(actionContacto(values));
   }
 });
-
+/**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
 export default connect(mapStateToProps, mapDispatchToProps)(Contact);
 

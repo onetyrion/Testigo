@@ -1,7 +1,7 @@
 import { StyleSheet,Dimensions } from 'react-native';
 const { width: winWidth, height: winHeight } = Dimensions.get('window');
 /**
- * @class Contiene los estilos de las rutas no autentificadas.
+ * @property stylesLogin Contiene los estilos de las rutas no autentificadas.
  */
 export const stylesLogin = StyleSheet.create({
   container: {

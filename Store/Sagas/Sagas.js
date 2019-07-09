@@ -158,11 +158,14 @@ function* sagaCambiarEmail(values){
             console.log("valid")
             Alert.alert('Email no verificado, Revisa tu bandeja de entrada...');
             user.sendEmailVerification();
+            auth.signOut();
         }else{
-            database.ref('Usuarios/' + user.uid).update({
-                "email": values.values
-                });
-            user.updateEmail(values.values)  
+            user.updateEmail(values.values)
+            .then(function(){
+                database.ref('Usuarios/' + user.uid).update({
+                    "email": values.values
+                    });
+            })  
             .then(function(userRecord) {
                 // See the UserRecord reference doc for the contents of userRecord.
                 //auth.signOut();

@@ -18,7 +18,7 @@ console.warn = message => {
   }
 };
 /**
- * @class Clase Main de la aplicación, se encuentra las configuraciones iniciales de la app.
+ * @class Clase Main de la aplicación, se encuentra las configuraciones iniciales de la app tanto de REDUX-SAGA, como propias de FIREBASE.
  */
 export default class App extends React.Component {
 

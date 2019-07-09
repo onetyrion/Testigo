@@ -18,6 +18,9 @@ export default class TyC extends Component {
     },
     headerTintColor: '#fff',
   };
+    /**
+   * @property render contiene la vista del componente.
+   */
   render() {
     return (
       <ScrollView style={stylesTyC.container}>

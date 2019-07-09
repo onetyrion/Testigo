@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Home.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Home.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react"; 
+import { StyleSheet,ActivityIndicator, Text, View, Image } from "react-native"; 
+import { Constants, Location, Permissions,MapView  } from "expo"; 
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { stylesHome } from "./StylesAuth";
+import { database } from "../../Store/Services/Firebase";
+import { connect} from 'react-redux';
+import { actionAnadirMarkers } from "../../Store/ACTIONS";
+/**
+ * @class Crea componente Home, Contiene vista del mapa, botón a camara, barra lateral.
+ */
+class Home extends React.Component { 
+    /**
+     * @property define en propiedad state latitud, longitud y sus respectivas Delta(Posicionamiento de la camara) como tambien isready.
+     * @param {*} props propiedad nativa de React Native. contiene parametros heredados.
+     * @param {*} state propiedad nativa de React Native.
+     * @param {number} lat Inicializado en null, sirve como parametro para el componente mapa.
+     * @param {number} long Inicializado en null, sirve como parametro para el componente mapa.
+     * @param {number} latitudeDelta Inicializado en 0.009, sirve como parametro para el componente mapa.
+     * @param {number} longitudeDelta Inicializado en 0.009, sirve como parametro para el componente mapa.
+     * @param {boolean} isready se usa para poner barra de carga en mapa, en caso de internet lento.
+     * 
+     */
+    constructor(props) {
+        super(props);
+        this.state = {
+            lat: null,
+            long: null,
+            latitudeDelta: 0.009,
+            longitudeDelta: 0.009,
+            isready:false,
+        };
+    }
+    /**
+     * @property Metodo nativo de React Native, se usa para obtener la latitud y longitud cuando el componente mapa ya ha cargado.
+     */
+    componentWillMount(){
+        try { 
+            navigator.geolocation.getCurrentPosition(
+                (position)=>{
+                    const lat = position.coords.latitude;
+                    const long =position.coords.longitude;
+                    this.setState({lat,long});
+                }
+            );
+            this.props.GetMarkerLast();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    /**
+     * @property Metodo nativo de React Native, se usa para definir false la variable isready en la propiedad estado.
+     */
+    componentDidMount(){
+        this.setState({isready:true})
+    }
+    Logout(){
+        dismiss();
+    }
+    /**
+     * @property renderiza el componente metodo, alberga el mapa principal y botón flotante de camera.
+     */
+    render() {   
+    const {navigate} = this.props.navigation;
+    const {dismiss} = this.props.navigation; 
+        return (
+            this.state.lat &amp;&amp; this.state.isready  ?
+            &lt;View style={stylesHome.container}>
+                &lt;MapView
+                    showsUserLocation={true} 
+                    followUserLocation={true}
+                    style={stylesHome.map}
+                    initialRegion={{
+                        latitude: this.state.lat,
+                        longitude: this.state.long,
+                        latitudeDelta:this.state.latitudeDelta,
+                        longitudeDelta:this.state.longitudeDelta
+                    }}
+                >
+                    {this.props.markers.length === 5 ? 
+                    this.props.markers.map(( values ) => {
+                        const lat = Object.values(values)[0].children_.root_.right.value.children_.root_.left.value.value_;
+                        const long = Object.values(values)[0].children_.root_.right.value.children_.root_.value.value_;
+                        return(&lt;MapView.Marker key={lat+""+long} coordinate={{latitude: lat,longitude:long}}
+                        />)
+                    })
+                    : null 
+
+                    }
+                &lt;/MapView>
+                &lt;ActionButton buttonColor="#dc3545" onPress={()=>{navigate('Camera')}}
+                renderIcon={()=>{return &lt;Icon name="md-camera" style={stylesHome.actionButtonIcon}/>}}>
+                &lt;/ActionButton>
+            &lt;/View>
+             
+            : &lt;View style={stylesHome.container}>&lt;ActivityIndicator size="large" color="#dc3545" />&lt;/View>
+            
+        ); 
+    } 
+}
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
+const mapStateToProps = (state) => {
+    return {
+      prop: state.prop,
+      markers: state.reducerMarkers
+    }
+  }
+  /**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      GetMarkerLast: () => {
+        var markers = [];
+        var ref = database.ref("Archivos").limitToLast(5).on("child_added", function(snapshot) {
+          markers = [snapshot,...markers];
+          if(markers.length === 5){
+            dispatch(actionAnadirMarkers(markers));
+          }
+        });
+      }
+    }
+  }
+  /**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
+  export default connect(mapStateToProps, mapDispatchToProps)(Home);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Home.html">Home</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#mapDispatchToProps">mapDispatchToProps</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 05 2019 22:09:59 GMT-0400 (GMT-04:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

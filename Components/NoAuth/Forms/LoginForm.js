@@ -5,7 +5,7 @@ import { stylesLogin } from '../StylesNoAuth';
 import { validate as validateRUT, clean, format } from'rut.js';
 /**
  * 
- * @class Contiene el formulario y validación de este mismo del Login. 
+ * @method fieldNombre Contiene el componente de los input
  */
 const fieldNombre = (props) => {
     return(
@@ -24,6 +24,10 @@ const fieldNombre = (props) => {
         </View>
     )
 }
+/**
+ * @method validate realiza la validación de cada campo
+ * @param values 
+ */
 const validate =(values)=>{
     const errors ={};
     if(!values.rut){
@@ -44,6 +48,10 @@ const validate =(values)=>{
     }
     return errors;
 }
+/**
+ * @method SignInForms contiene el componente general del formulario
+ * @param {*} props 
+ */
 const SignInForms = (props)=>{
     // console.log(props);
     return(

@@ -8,7 +8,7 @@ import RegisterForm from './Forms/RegisterForm';
 import { actionREGISTER } from '../../Store/ACTIONS';
 
 /**
- * @class contiene la view del login y añexa funcionabilidades.
+ * @class contiene el componente
  */
 
 class Register extends Component {
@@ -16,12 +16,26 @@ class Register extends Component {
     super(props);
     this.state = {checked:true,modalVisible:false,isready:false}
   }
+  /** 
+   * @property SignInUser redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+   */
   registroUsuario = (values) => {
     this.props.registro(values)
   };
+  /**
+   * @property cambia el valor de los check
+   */
   onpressChk = () =>{
     this.setState({checked:!this.state.checked});
   }
+  /** @property cambia el estado de la visibilidad del componente  */
+  setModalVisible=()=> {
+    this.setState({modalVisible: !this.state.modalVisible});
+  }
+    /**
+   * @property navigationOptions indica las opciones de React Navigation
+   */
   static navigationOptions = {
     title:"Registrarse",
     headerStyle: {
@@ -29,13 +43,15 @@ class Register extends Component {
     },
     headerTintColor: '#fff',
   };
-  setModalVisible=()=> {
-    console.log(this.state.modalVisible);
-    this.setState({modalVisible: !this.state.modalVisible});
-  }
+  /**
+   * @property componentDidMount contiene el valor de la visualización de carga
+   */
   componentDidMount(){
     this.setState({isready:true});
   }
+  /**
+   * @property render contiene la vista del componente.
+   */
   render() {
     const {goBack} = this.props.navigation;
     const {navigate} = this.props.navigation;
@@ -101,16 +117,27 @@ class Register extends Component {
     );
   }
 }
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
 const mapStateToProps = (state) => {
   return {
     prop: state.prop
   }
 }
+/**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
 const mapDispatchToProps = (dispatch) => ({
   registro: (values) => {
     dispatch(actionREGISTER(values));
   }
 })
 
+/**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
 export default connect(mapStateToProps, mapDispatchToProps)(Register);
   

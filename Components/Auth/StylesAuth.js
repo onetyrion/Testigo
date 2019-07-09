@@ -2,7 +2,7 @@ import { StyleSheet,Dimensions } from 'react-native';
 
 const { width: winWidth, height: winHeight } = Dimensions.get('window');
 /**
- * @class Contiene los estilos de las rutas autentificadas.
+ * @property Contiene los estilos de las rutas autentificadas.
  */
 export const stylesSendPost = StyleSheet.create({
   imageContainer:{

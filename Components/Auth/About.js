@@ -10,7 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { stylesAbout } from './StylesAuth';
 /**
- * @description componente que renderiza la view de la sección Acerca de. 
+ * @name ContactList componente que renderiza la view de la sección Acerca de. 
  */
 export default class ContactList extends Component {
 
@@ -27,8 +27,9 @@ export default class ContactList extends Component {
       ]
     }
   }
-
-
+  /**
+   * @property render contiene la vista del componente.
+   */
   render() {
     const {navigate} = this.props.navigation;
     return (

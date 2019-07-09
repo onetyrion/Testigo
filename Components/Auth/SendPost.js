@@ -21,6 +21,10 @@ class SendPost extends Component {
     super(props);
     state = {isVisibleMap:false,captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false}
   }
+/**
+   * @property SendPost redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+ */
   SendPost = (values) => {
     captures= [];
     audio=(this.state.AudioData ? this.state.AudioData : '');
@@ -39,10 +43,10 @@ class SendPost extends Component {
   };
 /**
  *  METHOD MODAL DATATIME PICKER
+*/
+/**
+ * @property DateTimePickerShow funcion que cambia la visibilidad del componente que toma la fecha y hora
  */
-  showDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: true });
-  };
   DateTimePickerShow = () =>{
     this.setState({ isDateTimePickerVisible: !this.state.isDateTimePickerVisible });
   };
@@ -56,11 +60,17 @@ class SendPost extends Component {
     this.setState({TextDatetime:dateformat});
     this.hideDateTimePicker();
   };
+  /**
+ * @property _pickDocument función que recoge un archivo de la galeria 
+ */
   _pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({});
     this.setState({AudioData:result});
     console.log(result);
   };
+  /**
+ * @property showMapPicker funcion que cambia la visibilidad del componente que toma la ubicación
+ */
   showMapPicker = ({latitude,longitude}) =>{
     this.setState({ isVisibleMap: !this.state.isVisibleMap,MapData:{latitude,longitude} });
   };
@@ -73,6 +83,9 @@ class SendPost extends Component {
     this.setState({captures:photo});
     this.props.cargarImagen(photo);
   }
+/**
+ * @property render contiene la vista del componente.
+ */
   render() {
     const captures = this.state.captures;
     return (
@@ -138,11 +151,16 @@ class SendPost extends Component {
     );
   }
 }
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
 const mapStateToProps = state => ({
   props: state,
   imagen: state.reducerImagenPublicacion,
 });
-
+/**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
 const mapDispatchToProps = dispatch => ({
   cargarImagen: (imagen) => {
     dispatch(actionCargarImagenPublicacion(imagen));
@@ -152,7 +170,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actionSubirPublicacion(values));
   }
 });
-
+/**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
 export default connect(mapStateToProps, mapDispatchToProps)(SendPost);
-
-

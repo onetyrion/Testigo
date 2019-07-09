@@ -12,7 +12,7 @@ import { actionAnadirMarkers } from "../../Store/ACTIONS";
  */
 class Home extends React.Component { 
     /**
-     * @description define en propiedad state latitud, longitud y sus respectivas Delta(Posicionamiento de la camara) como tambien isready.
+     * @property define en propiedad state latitud, longitud y sus respectivas Delta(Posicionamiento de la camara) como tambien isready.
      * @param {*} props propiedad nativa de React Native. contiene parametros heredados.
      * @param {*} state propiedad nativa de React Native.
      * @param {number} lat Inicializado en null, sirve como parametro para el componente mapa.
@@ -33,7 +33,7 @@ class Home extends React.Component {
         };
     }
     /**
-     * @description Metodo nativo de React Native, se usa para obtener la latitud y longitud cuando el componente mapa ya ha cargado.
+     * @property Metodo nativo de React Native, se usa para obtener la latitud y longitud cuando el componente mapa ya ha cargado.
      */
     componentWillMount(){
         try { 
@@ -50,7 +50,7 @@ class Home extends React.Component {
         }
     }
     /**
-     * @description Metodo nativo de React Native, se usa para definir false la variable isready en la propiedad estado.
+     * @property Metodo nativo de React Native, se usa para definir false la variable isready en la propiedad estado.
      */
     componentDidMount(){
         this.setState({isready:true})
@@ -59,7 +59,7 @@ class Home extends React.Component {
         dismiss();
     }
     /**
-     * @description renderiza el componente metodo, alberga el mapa principal y botón flotante de camera.
+     * @property renderiza el componente metodo, alberga el mapa principal y botón flotante de camera.
      */
     render() {   
     const {navigate} = this.props.navigation;
@@ -99,13 +99,18 @@ class Home extends React.Component {
         ); 
     } 
 }
-
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
 const mapStateToProps = (state) => {
     return {
       prop: state.prop,
       markers: state.reducerMarkers
     }
   }
+  /**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
   const mapDispatchToProps = (dispatch) => {
     return {
       GetMarkerLast: () => {
@@ -119,4 +124,9 @@ const mapStateToProps = (state) => {
       }
     }
   }
+  /**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
   export default connect(mapStateToProps, mapDispatchToProps)(Home);

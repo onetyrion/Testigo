@@ -7,7 +7,7 @@ import { stylesSendPost } from '../StylesAuth';
 
 /**
  * 
- * @class contiene el formulario de el envio de denuncia y sus validaciones. 
+ * @method fieldNombre Contiene el componente de los input
  */
 const fieldNombre = (props) => {
     return(
@@ -27,6 +27,10 @@ const fieldNombre = (props) => {
         </View>
     )
 }
+/**
+ * 
+ * @method fieldDateTime Contiene el componente de la fecha
+ */
 const fieldDateTime = (props) => {
     return(
         <View >
@@ -43,6 +47,9 @@ const fieldDateTime = (props) => {
         </View>
     )
 }
+/**
+ * @method fieldAudio Contiene el componente que recoge el audio
+ */
 const fieldAudio = (props) => {
     //console.log(props.AudioData)
     return(
@@ -60,6 +67,9 @@ const fieldAudio = (props) => {
         </View>
     )
 }
+/**
+ * @method fieldPhoto Contiene el componente de la foto
+ */
 const fieldPhoto = (props) => {
     //console.log(props.photoData)
     return(
@@ -69,6 +79,9 @@ const fieldPhoto = (props) => {
         </View>
     )
 }
+/**
+ * @method fieldMap Contiene el componente de el mapa
+ */
 const fieldMap = (props) => {
     //console.log(props.MapsData)
     return(
@@ -86,6 +99,11 @@ const fieldMap = (props) => {
         </View>
     )
 }
+/**
+ * @method validate realiza la validación de cada campo
+ * @param values 
+ * @param props
+ */
 const validate =(values,props)=>{
     const errors ={};
     if(!values.rut){
@@ -100,18 +118,22 @@ const validate =(values,props)=>{
         }
     return errors;
     }
-    const SendPostForms = (props)=>{
-        // console.log(props);
-        return(
-            <View style={{justifyContent: 'center',alignItems:'center'}}>
-            <Field name="photo" component={fieldPhoto} photoData={props.photoData}/>
-            <Field name="Audio" component={fieldAudio} AudioData={props.AudioData} AudioPicker={props.AudioPicker}/>
-            <Field name="datetime" component={fieldDateTime} txtDate={props.DateTimePickerText} modal={props.DateTimePickerisVisible} pc='Fecha y hora'/>
-            <Field name="description" component={fieldNombre} pc='Ingrese descripción de lo ocurrido'/>
-            <Field name="ubicacion" component={fieldMap} showMapPicker={props.showMapPicker} MapsData={props.MapsData} pc='Ingrese donde ocurrió'/>
-            <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.SendPost,)}>
-                <Text style={{color: "#fff",fontSize:15}}>Enviar denuncia</Text>
-            </TouchableOpacity>            
+    /**
+ * @method SendPostForms contiene el componente general del formulario
+ * @param {*} props 
+ */
+const SendPostForms = (props)=>{
+    // console.log(props);
+    return(
+        <View style={{justifyContent: 'center',alignItems:'center'}}>
+        <Field name="photo" component={fieldPhoto} photoData={props.photoData}/>
+        <Field name="Audio" component={fieldAudio} AudioData={props.AudioData} AudioPicker={props.AudioPicker}/>
+        <Field name="datetime" component={fieldDateTime} txtDate={props.DateTimePickerText} modal={props.DateTimePickerisVisible} pc='Fecha y hora'/>
+        <Field name="description" component={fieldNombre} pc='Ingrese descripción de lo ocurrido'/>
+        <Field name="ubicacion" component={fieldMap} showMapPicker={props.showMapPicker} MapsData={props.MapsData} pc='Ingrese donde ocurrió'/>
+        <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.SendPost,)}>
+            <Text style={{color: "#fff",fontSize:15}}>Enviar denuncia</Text>
+        </TouchableOpacity>            
         </View>
     )
 };

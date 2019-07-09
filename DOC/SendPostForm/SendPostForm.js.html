@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: SendPostForm.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: SendPostForm.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {Component} from 'react';
+import { View,Button,TextInput,TouchableOpacity,StyleSheet } from 'react-native';
+import {Field, reduxForm} from 'redux-form';
+import { Image,Text, Input } from 'react-native-elements';
+import { stylesRegister, stylesLogin } from '../../NoAuth/StylesNoAuth';
+import { stylesSendPost } from '../StylesAuth';
+
+/**
+ * 
+ * @method fieldNombre Contiene el componente de los input
+ */
+const fieldNombre = (props) => {
+    return(
+        &lt;View >
+            &lt;TextInput
+            onChangeText={props.input.onChange} 
+            value={props.input.value} 
+            placeholder={props.pc}
+            placeholderTextColor="#b0b0b0"
+            autoCapitalize='none'
+            onBlur={props.input.onBlur}
+            style={stylesRegister.textInput}
+            multiline = {props.input.name ===  "description" ? true : false}
+            maxLength = {props.input.name === "description" ? 600 : 150}
+            />
+            {props.meta.touched &amp;&amp; props.meta.error &amp;&amp; &lt;Text style={stylesLogin.errors}>{props.meta.error}&lt;/Text>}
+        &lt;/View>
+    )
+}
+/**
+ * 
+ * @method fieldDateTime Contiene el componente de la fecha
+ */
+const fieldDateTime = (props) => {
+    return(
+        &lt;View >
+            &lt;TouchableOpacity onPress={props.modal}>
+            &lt;Text 
+            onChangeText={props.input.onChange}
+            placeholder={props.pc}
+            placeholderTextColor="#b0b0b0"
+            autoCapitalize='none'
+            onBlur={props.input.onBlur}
+            style={stylesSendPost.textInput}>{props.txtDate ? props.txtDate : "Seleccione fecha"}&lt;/Text>
+            &lt;/TouchableOpacity>
+            {props.meta.touched &amp;&amp; props.meta.error &amp;&amp; &lt;Text style={stylesLogin.errors}>{props.meta.error}&lt;/Text>}
+        &lt;/View>
+    )
+}
+/**
+ * @method fieldAudio Contiene el componente que recoge el audio
+ */
+const fieldAudio = (props) => {
+    //console.log(props.AudioData)
+    return(
+        &lt;View >
+            &lt;TouchableOpacity onPress={props.AudioPicker}>
+            &lt;Text 
+            onChangeText={props.input.onChange}
+            placeholder={props.pc}
+            placeholderTextColor="#b0b0b0"
+            autoCapitalize='none'
+            onBlur={props.input.onBlur}
+            style={stylesSendPost.textInput}>{props.AudioData ? props.AudioData.name : "Seleccione Audio"}&lt;/Text>
+            &lt;/TouchableOpacity>
+            {props.meta.touched &amp;&amp; props.meta.error &amp;&amp; &lt;Text style={stylesLogin.errors}>{props.meta.error}&lt;/Text>}
+        &lt;/View>
+    )
+}
+/**
+ * @method fieldPhoto Contiene el componente de la foto
+ */
+const fieldPhoto = (props) => {
+    //console.log(props.photoData)
+    return(
+        &lt;View>
+            &lt;Image source={{uri: props.photoData.uri}}
+            style={{marginTop:20,width:200,height:200}}/>
+        &lt;/View>
+    )
+}
+/**
+ * @method fieldMap Contiene el componente de el mapa
+ */
+const fieldMap = (props) => {
+    //console.log(props.MapsData)
+    return(
+        &lt;View >
+            &lt;TouchableOpacity onPress={props.showMapPicker}>
+            &lt;Text 
+            onChangeText={props.input.onChange}
+            placeholder={props.pc}
+            placeholderTextColor="#b0b0b0"
+            autoCapitalize='none'
+            onBlur={props.input.onBlur}
+            style={stylesSendPost.textInput}>Seleccione Ubicación&lt;/Text>
+            &lt;/TouchableOpacity>
+            {props.meta.touched &amp;&amp; props.meta.error &amp;&amp; &lt;Text style={stylesLogin.errors}>{props.meta.error}&lt;/Text>}
+        &lt;/View>
+    )
+}
+/**
+ * @method validate realiza la validación de cada campo
+ * @param values 
+ * @param props
+ */
+const validate =(values,props)=>{
+    const errors ={};
+    if(!values.rut){
+        errors.rut = 'requerido';
+    }
+    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)){
+        //     errors.correo = 'correo invalido';
+        // } 
+        console.log(props.imagen);
+    if (!props.imagen) {
+        errors.imagen = 'imagen es requerida';
+        }
+    return errors;
+    }
+    /**
+ * @method SendPostForms contiene el componente general del formulario
+ * @param {*} props 
+ */
+const SendPostForms = (props)=>{
+    // console.log(props);
+    return(
+        &lt;View style={{justifyContent: 'center',alignItems:'center'}}>
+        &lt;Field name="photo" component={fieldPhoto} photoData={props.photoData}/>
+        &lt;Field name="Audio" component={fieldAudio} AudioData={props.AudioData} AudioPicker={props.AudioPicker}/>
+        &lt;Field name="datetime" component={fieldDateTime} txtDate={props.DateTimePickerText} modal={props.DateTimePickerisVisible} pc='Fecha y hora'/>
+        &lt;Field name="description" component={fieldNombre} pc='Ingrese descripción de lo ocurrido'/>
+        &lt;Field name="ubicacion" component={fieldMap} showMapPicker={props.showMapPicker} MapsData={props.MapsData} pc='Ingrese donde ocurrió'/>
+        &lt;TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.SendPost,)}>
+            &lt;Text style={{color: "#fff",fontSize:15}}>Enviar denuncia&lt;/Text>
+        &lt;/TouchableOpacity>            
+        &lt;/View>
+    )
+};
+export default reduxForm({form: 'SendPostForms',validate})(SendPostForms);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#fieldAudioContieneelcomponentequerecogeelaudio">fieldAudio Contiene el componente que recoge el audio</a></li><li><a href="global.html#fieldDateTimeContieneelcomponentedelafecha">fieldDateTime Contiene el componente de la fecha</a></li><li><a href="global.html#fieldMapContieneelcomponentedeelmapa">fieldMap Contiene el componente de el mapa</a></li><li><a href="global.html#fieldNombreContieneelcomponentedelosinput">fieldNombre Contiene el componente de los input</a></li><li><a href="global.html#fieldPhotoContieneelcomponentedelafoto">fieldPhoto Contiene el componente de la foto</a></li><li><a href="global.html#SendPostFormscontieneelcomponentegeneraldelformulario">SendPostForms contiene el componente general del formulario</a></li><li><a href="global.html#validaterealizalavalidaci%25C3%25B3ndecadacampo">validate realiza la validación de cada campo</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 05 2019 23:06:22 GMT-0400 (GMT-04:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

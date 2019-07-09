@@ -4,10 +4,9 @@ import {Field, reduxForm} from 'redux-form';
 import { Image,Text, Input } from 'react-native-elements';
 import { stylesRegister, stylesLogin } from '../../NoAuth/StylesNoAuth';
 import { stylesSendPost } from '../StylesAuth';
-
 /**
  * 
- * @class contiene el formulario de el envio de denuncia y sus validaciones. 
+ * @method fieldNombre Contiene el componente de los input
  */
 const fieldNombre = (props) => {
     return(
@@ -26,14 +25,21 @@ const fieldNombre = (props) => {
         </View>
     )
 };
-
+/**
+ * @method validate realiza la validación de cada campo
+ * @param values 
+ */
 const validate =(values,props)=>{
     const errors ={};
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)){
         errors.email = 'correo invalido';
     } 
     return errors;
-    }
+}
+/**
+ * @method ProfileEmailForm contiene el componente general del formulario
+ * @param {*} props 
+ */
 const ProfileEmailForm = (props)=>{
     // console.log(props);
     return(

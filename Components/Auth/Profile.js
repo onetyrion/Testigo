@@ -24,13 +24,24 @@ class Profile extends Component {
     super(props);
     this.state={CorreoVisible: false,txtCorreo:""}
   }
+
+  /**
+   * @property CambiarCorreo redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+   */
   CambiarCorreo = (values) => {
     this.props.ChangeEmail(values.email);
     this.setState({CorreoVisible: false});
   }
+/**
+* @property componentWillMount metodo nativo que carga una función de la store de redux
+*/
   componentWillMount(){
     this.props.autenticacion();
   }
+/**
+ * @property render contiene la vista del componente.
+ */
   render() {
     return (
       <View style={stylesProfile.container}>
@@ -81,6 +92,7 @@ const mapDispatchToProps = (dispatch) => {
       if (!user.emailVerified) {
         Alert.alert('Email no verificado, Revisa tu bandeja de entrada...');
         user.sendEmailVerification();
+        auth.signOut();
       }else{
         auth.sendPasswordResetEmail(emailAddress).then(function() {
           console.log("Email Enviado");

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Register.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Register.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import { View,Image, TextInput,StyleSheet,TouchableOpacity,KeyboardAvoidingView,Modal,ActivityIndicator,Alert } from 'react-native';
+import { CheckBox,Icon,Text,Button } from 'react-native-elements';
+import Carnet from '../../assets/carnet2.jpeg';
+import { stylesRegister } from './StylesNoAuth';
+import { connect} from 'react-redux';
+import RegisterForm from './Forms/RegisterForm';
+import { actionREGISTER } from '../../Store/ACTIONS';
+
+/**
+ * @class contiene el componente
+ */
+
+class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {checked:true,modalVisible:false,isready:false}
+  }
+  /** 
+   * @property SignInUser redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+   */
+  registroUsuario = (values) => {
+    this.props.registro(values)
+  };
+  /**
+   * @property cambia el valor de los check
+   */
+  onpressChk = () =>{
+    this.setState({checked:!this.state.checked});
+  }
+  /** @property cambia el estado de la visibilidad del componente  */
+  setModalVisible=()=> {
+    this.setState({modalVisible: !this.state.modalVisible});
+  }
+    /**
+   * @property navigationOptions indica las opciones de React Navigation
+   */
+  static navigationOptions = {
+    title:"Registrarse",
+    headerStyle: {
+      backgroundColor: '#dc3545',
+    },
+    headerTintColor: '#fff',
+  };
+  /**
+   * @property componentDidMount contiene el valor de la visualización de carga
+   */
+  componentDidMount(){
+    this.setState({isready:true});
+  }
+  /**
+   * @property render contiene la vista del componente.
+   */
+  render() {
+    const {goBack} = this.props.navigation;
+    const {navigate} = this.props.navigation;
+    return (
+      this.state.isready ?
+      &lt;View style={stylesRegister.container}>
+        &lt;Modal
+          visible={this.state.modalVisible}
+          animationType={'fade'}
+          transparent={true}
+          onRequestClose={this.setModalVisible}>
+          &lt;View style={stylesRegister.modalContainer}>
+            &lt;View style={stylesRegister.innerContainer}>
+              &lt;Image source={Carnet} style={{width:260,height:380}}/>
+              &lt;Button
+                onPress={this.setModalVisible} 
+                title="Cerrar"
+                buttonStyle={stylesRegister.button}
+              >
+              &lt;/Button>
+            &lt;/View>
+          &lt;/View>
+        &lt;/Modal>
+
+        &lt;KeyboardAvoidingView style={stylesRegister.container} behavior="padding" enabled>
+          &lt;RegisterForm 
+            registro={this.registroUsuario} 
+            pressChk={this.state.checked} 
+            onpressChk={this.onpressChk}
+            navigate={navigate}
+            goBack={goBack}
+            pressModal={this.setModalVisible}/>
+        {/* &lt;TextInput placeholder="RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput1}/>
+        &lt;View style={{flexDirection: "row", backgroundColor:'#f0f0f0',padding:3,marginTop:20,borderRadius:5}}>
+        &lt;TextInput placeholder="N° de documento" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput2}/>
+          &lt;Icon name='search' 
+            type='font-awesome' 
+            containerStyle={{marginTop:3,paddingLeft:10,marginRight:7}}
+            underlayColor="#b0b0b0"
+            onPress={()=>{this.setModalVisible(true);}}/> 
+        &lt;/View>
+        &lt;TextInput placeholder="Contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
+        &lt;TextInput placeholder="Repita su contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
+        &lt;TextInput placeholder="Email" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
+        &lt;CheckBox
+          title='Aceptar los terminos y condiciones (Manten para ver más)' 
+          checked={this.state.checked}
+          onPress={() => this.setState({checked: !this.state.checked})}
+          onLongPress={() => {navigate('TyC')}}
+          containerStyle={stylesRegister.CheckBox}
+        />
+        &lt;View style={{flexDirection:"row"}}>
+          &lt;TouchableOpacity style={stylesRegister.button} onPress={() => {goBack()}}>
+            &lt;Text style={{color: "#fff",fontSize:15}}>Cancelar&lt;/Text>
+          &lt;/TouchableOpacity>
+          &lt;TouchableOpacity style={stylesRegister.button}>
+            &lt;Text style={{color: "#fff",fontSize:15}}>Aceptar&lt;/Text>
+          &lt;/TouchableOpacity>
+        &lt;/View> */}
+        &lt;/KeyboardAvoidingView>
+      &lt;/View>
+      : &lt;View style={stylesRegister.container}>&lt;ActivityIndicator size="large" color="#dc3545" />&lt;/View>
+    );
+  }
+}
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
+const mapStateToProps = (state) => {
+  return {
+    prop: state.prop
+  }
+}
+/**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
+const mapDispatchToProps = (dispatch) => ({
+  registro: (values) => {
+    dispatch(actionREGISTER(values));
+  }
+})
+
+/**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
+  
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Register.html">Register</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#mapDispatchToProps">mapDispatchToProps</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 05 2019 21:00:03 GMT-0400 (GMT-04:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

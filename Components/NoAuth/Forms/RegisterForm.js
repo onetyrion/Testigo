@@ -6,7 +6,7 @@ import { stylesRegister, stylesLogin } from '../StylesNoAuth';
 import { validate as validateRUT, clean, format } from'rut.js';
 /**
  * 
- * @class Contiene el formulario y validación de este mismo del Register.  
+ * @method fieldNombre Contiene el componente de los input
  */
 const fieldNombre = (props) => {
     //  console.log(props);
@@ -26,6 +26,10 @@ const fieldNombre = (props) => {
         </View>
     )
 };
+/**
+ * 
+ * @method fieldPopUp Contiene el componente del pop up
+ */
 const fieldPopUp = (props) =>{
     return(
         <View>
@@ -49,7 +53,10 @@ const fieldPopUp = (props) =>{
         </View>
     )
 }
-
+/**
+ * @method validate realiza la validación de cada campo
+ * @param values 
+ */
 const validate =(values)=>{
     const errors ={};
     if(!values.rut){
@@ -85,7 +92,10 @@ const validate =(values)=>{
     }
     return errors;
 }
-
+/**
+ * @method SignUpForms contiene el componente general del formulario
+ * @param {*} props 
+ */
 const SignUpForms = (props)=>{
     //console.log(props);
     return(

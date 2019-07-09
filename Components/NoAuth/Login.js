@@ -12,7 +12,7 @@ import { Overlay } from 'react-native-elements';
 import { auth } from '../../Store/Services/Firebase';
 
 /**
- * @class contiene view del login y funcionabilidad anexas a este
+ * @class contiene el componente del login.
  */
 
 class Login extends Component {
@@ -20,22 +20,39 @@ class Login extends Component {
     super(props),
     this.state={fontLoaded: false,CorreoVisible:false}
   }
+  /**
+   * @property navigationOptions indica las opciones de React Navigation
+   */
   static navigationOptions = {
     header:null
   };
+  /**
+   * @property componentDidMount carga la fuente utilizada para el logo
+   */
   async componentDidMount() {
     await Font.loadAsync({
       'pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
     });
     this.setState({ fontLoaded: true });
   }  
+  /**
+   * @property SignInUser redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+   */
   SignInUser = (values) => {
     this.props.login(values);
   }
+  /**
+   * @property CambiarContrasena redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+   */
   CambiarContrasena = (values) => {
     this.props.ChangePassword(values.email);
     this.setState({CorreoVisible: false});
   }
+/**
+ * @property render contiene la vista del componente.
+ */
   render() {
     const {navigate} = this.props.navigation;
     const {push} = this.props.navigation;
@@ -66,12 +83,18 @@ class Login extends Component {
     );
   } 
 }
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
 const mapStateToProps = (state) => {
   return {
     prop: state.prop,
     usuario: state.reducerSesion,
   }
 }
+/**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (datos) => {
@@ -89,5 +112,10 @@ const mapDispatchToProps = (dispatch) => {
     },  
   }
 }
+/**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
 

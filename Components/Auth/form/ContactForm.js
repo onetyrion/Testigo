@@ -7,7 +7,7 @@ import { stylesSendPost } from '../StylesAuth';
 
 /**
  * 
- * @class contiene el formulario de el envio de denuncia y sus validaciones. 
+ * @method fieldNombre Contiene el componente de los input
  */
 const fieldNombre = (props) => {
     return(
@@ -27,12 +27,10 @@ const fieldNombre = (props) => {
         </View>
     )
 }
-const fieldAsunto = (props) => {
-    return(           
-     <Input
-        label={"Asunto:"}
-        maxLength = {120} />)
-}
+/**
+ * @method validate realiza la validación de cada campo
+ * @param values 
+ */
 const validate =(values,props)=>{
     const errors ={};
     if(!values.asunto){
@@ -42,16 +40,19 @@ const validate =(values,props)=>{
     }
     return errors;
     }
-    const contactForm = (props)=>{
-        // console.log(props);
-        return(
-            <View style={{justifyContent: 'center',alignItems:'center'}}>
-            <Field name="asunto" component={fieldNombre} ph={"Asunto:"}/>
-            <Field name="mensaje" component={fieldNombre} ph={"Mensaje:"}/>
-            <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.contact,)}>
-                <Text style={{color: "#fff",fontSize:15}}>Enviar</Text>
-            </TouchableOpacity>            
-        </View>
-    )
-};
+/**
+ * @method contactForm contiene el componente general del formulario
+ * @param {*} props 
+ */
+const contactForm = (props)=>{
+// console.log(props);
+return(
+    <View style={{justifyContent: 'center',alignItems:'center'}}>
+    <Field name="asunto" component={fieldNombre} ph={"Asunto:"}/>
+    <Field name="mensaje" component={fieldNombre} ph={"Mensaje:"}/>
+    <TouchableOpacity style={stylesLogin.button} onPress={props.handleSubmit(props.contact,)}>
+        <Text style={{color: "#fff",fontSize:15}}>Enviar</Text>
+    </TouchableOpacity>            
+    </View>
+)};
 export default reduxForm({form: 'contactForm',validate})(contactForm);

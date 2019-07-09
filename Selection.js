@@ -8,7 +8,7 @@ import RoutesAuth from './Components/Auth/RoutesAuth';
 import { stylesHome } from './Components/Auth/StylesAuth';
 console.ignoredYellowBox = ['Setting a timer'];
 /**
- * @class Clase que realiza la autentificación del usuario.
+ * @class Contiene la condición en caso de estar logeado cargar las vistas correspondientes.
  */
 class Selection extends Component {
     constructor(props){
