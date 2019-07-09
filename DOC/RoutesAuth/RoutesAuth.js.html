@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: RoutesAuth.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: RoutesAuth.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @class Este componente contiene las rutas necesarias para navegar cuando el usuario está autenticado.
+ */
+import React, { Component } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { createDrawerNavigator,createStackNavigator,createAppContainer} from 'react-navigation';
+import { Icon } from 'react-native-elements';
+
+import Home from './Home';
+import Profile from './Profile';
+import Logout from './Logout';
+import About from './About';
+import Camera from './Camera/camera.page';
+import SendPost from './SendPost';
+import TyC from '../NoAuth/TyC';
+import Contact from './Contact';
+import SendPostMap from './SendPostMap';
+/**
+ * Se importan los componentes necesarios(Home, Profile, About,Camera, SendPost, Contact, Terms and conditions, Logout)
+ */
+class NavigationDrawerStructure extends Component {
+  toggleDrawer = () => {
+    this.props.navigationProps.toggleDrawer();
+  };
+  /**
+   * @description Renderiza la barra superior y botón para desplegar barra lateral.
+   * @returns {View}
+   */
+  render() {
+    return (
+      &lt;View style={{ flexDirection: 'row' }}>
+        &lt;TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
+          &lt;Icon name='bars' 
+            type='font-awesome' 
+            containerStyle={{ width: 25, height: 25, marginLeft: 15 }}
+            color="#fff"
+            underlayColor="#a0a0a0"/>
+        &lt;/TouchableOpacity>
+      &lt;/View>
+    );
+  }
+}
+/**
+ * @property {createStackNavigator} Home_StackNavigator Grupo de rutas dentro de la view Home (Camera,SendPost).
+ * @returns {createStackNavigator}
+ */
+const Home_StackNavigator = createStackNavigator({
+  First: {
+    screen: Home,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Testigo',
+      headerLeft: &lt;NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+  Camera:{
+    screen: Camera,
+    navigationOptions:{header:null}
+  },
+  pickMap:{
+    screen: SendPostMap,
+    navigationOptions:{header:null}
+  },
+  SendPost:{
+    screen: SendPost,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Enviar denuncia',
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }), 
+  },
+});
+/**
+ * @property {createStackNavigator} Profile_StackNavigator Grupo de rutas dentro de la view Profile (Profile).
+ * @returns {createStackNavigator}
+ */
+const Profile_StackNavigator = createStackNavigator({
+  Second: {
+    screen: Profile,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Perfil',
+      headerLeft: &lt;NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+});
+/**
+ * @property {createStackNavigator} Logout_StackNavigator Grupo de rutas dentro de la view Logout (Redirecciona al login).
+ * @returns {createStackNavigator}
+ */
+const Logout_StackNavigator = createStackNavigator({
+  Third: {
+    screen: Logout,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Cerrar sesión',
+      headerLeft: &lt;NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+});
+/**
+ * @property {createStackNavigator} About_StackNavigator Grupo de rutas dentro de la view About (TyC,Contact).
+ * @returns {createStackNavigator}
+ */
+const About_StackNavigator = createStackNavigator({
+  Four: {
+    screen: About,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Acerca de',
+      headerLeft: &lt;NavigationDrawerStructure navigationProps={navigation} />,
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }),
+  },
+  TyC:{
+    screen: TyC,
+    navigationOptions:{
+      title: "Terminos y Condiciones",
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }
+  },
+  Contact:{
+    screen: Contact,
+    navigationOptions:{
+      title: "Contacto",
+      headerStyle: {
+        backgroundColor: '#dc3545',
+      },
+      headerTintColor: '#fff',
+    }
+  },
+});
+/**
+ * @property {createDrawerNavigator} dnMain Conjunto mayor de rutas. Contiene los grupos de rutas y exporta un unico objeto.
+ * @returns {createDrawerNavigator}
+ */
+const dnMain = createDrawerNavigator({
+  Home: {
+    screen: Home_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Home',
+    },
+    navigationOptions:({ navigation }) => {
+      let { routeName } = navigation.state.routes[navigation.state.index]
+      let navigationOptions = {}
+      if (routeName === 'SendPost' || routeName === 'Camera') {
+        navigationOptions.drawerLockMode = 'locked-closed';
+      }
+      return navigationOptions
+    } 
+  },
+  Profile: {
+    screen: Profile_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Perfil',
+    },
+  },
+  Logout: {
+    screen: Logout_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Cerrar Sesión',
+    },
+  },
+  About: {
+    screen: About_StackNavigator,
+    navigationOptions: {
+      drawerLabel: 'Acerca de',
+      drawerLockMode: 'locked-closed',
+    },
+  }
+});
+export default createAppContainer(dnMain);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="NavigationDrawerStructure.html">NavigationDrawerStructure</a></li></ul><h3>Global</h3><ul><li><a href="global.html#About_StackNavigator">About_StackNavigator</a></li><li><a href="global.html#dnMain">dnMain</a></li><li><a href="global.html#Home_StackNavigator">Home_StackNavigator</a></li><li><a href="global.html#Logout_StackNavigator">Logout_StackNavigator</a></li><li><a href="global.html#Profile_StackNavigator">Profile_StackNavigator</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 05 2019 22:25:01 GMT-0400 (GMT-04:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

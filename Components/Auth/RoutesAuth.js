@@ -1,3 +1,6 @@
+/**
+ * @class Este componente contiene las rutas necesarias para navegar cuando el usuario está autenticado.
+ */
 import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { createDrawerNavigator,createStackNavigator,createAppContainer} from 'react-navigation';
@@ -11,11 +14,18 @@ import Camera from './Camera/camera.page';
 import SendPost from './SendPost';
 import TyC from '../NoAuth/TyC';
 import Contact from './Contact';
-
+import SendPostMap from './SendPostMap';
+/**
+ * Se importan los componentes necesarios(Home, Profile, About,Camera, SendPost, Contact, Terms and conditions, Logout)
+ */
 class NavigationDrawerStructure extends Component {
   toggleDrawer = () => {
     this.props.navigationProps.toggleDrawer();
   };
+  /**
+   * @description Renderiza la barra superior y botón para desplegar barra lateral.
+   * @returns {View}
+   */
   render() {
     return (
       <View style={{ flexDirection: 'row' }}>
@@ -30,7 +40,10 @@ class NavigationDrawerStructure extends Component {
     );
   }
 }
-
+/**
+ * @property {createStackNavigator} Home_StackNavigator Grupo de rutas dentro de la view Home (Camera,SendPost).
+ * @returns {createStackNavigator}
+ */
 const Home_StackNavigator = createStackNavigator({
   First: {
     screen: Home,
@@ -47,6 +60,10 @@ const Home_StackNavigator = createStackNavigator({
     screen: Camera,
     navigationOptions:{header:null}
   },
+  pickMap:{
+    screen: SendPostMap,
+    navigationOptions:{header:null}
+  },
   SendPost:{
     screen: SendPost,
     navigationOptions: ({ navigation }) => ({
@@ -58,7 +75,10 @@ const Home_StackNavigator = createStackNavigator({
     }), 
   },
 });
-
+/**
+ * @property {createStackNavigator} Profile_StackNavigator Grupo de rutas dentro de la view Profile (Profile).
+ * @returns {createStackNavigator}
+ */
 const Profile_StackNavigator = createStackNavigator({
   Second: {
     screen: Profile,
@@ -72,7 +92,10 @@ const Profile_StackNavigator = createStackNavigator({
     }),
   },
 });
-
+/**
+ * @property {createStackNavigator} Logout_StackNavigator Grupo de rutas dentro de la view Logout (Redirecciona al login).
+ * @returns {createStackNavigator}
+ */
 const Logout_StackNavigator = createStackNavigator({
   Third: {
     screen: Logout,
@@ -86,7 +109,10 @@ const Logout_StackNavigator = createStackNavigator({
     }),
   },
 });
-
+/**
+ * @property {createStackNavigator} About_StackNavigator Grupo de rutas dentro de la view About (TyC,Contact).
+ * @returns {createStackNavigator}
+ */
 const About_StackNavigator = createStackNavigator({
   Four: {
     screen: About,
@@ -120,12 +146,24 @@ const About_StackNavigator = createStackNavigator({
     }
   },
 });
-const DrawerNavigatorExample = createDrawerNavigator({
+/**
+ * @property {createDrawerNavigator} dnMain Conjunto mayor de rutas. Contiene los grupos de rutas y exporta un unico objeto.
+ * @returns {createDrawerNavigator}
+ */
+const dnMain = createDrawerNavigator({
   Home: {
     screen: Home_StackNavigator,
     navigationOptions: {
       drawerLabel: 'Home',
     },
+    navigationOptions:({ navigation }) => {
+      let { routeName } = navigation.state.routes[navigation.state.index]
+      let navigationOptions = {}
+      if (routeName === 'SendPost' || routeName === 'Camera') {
+        navigationOptions.drawerLockMode = 'locked-closed';
+      }
+      return navigationOptions
+    } 
   },
   Profile: {
     screen: Profile_StackNavigator,
@@ -143,7 +181,8 @@ const DrawerNavigatorExample = createDrawerNavigator({
     screen: About_StackNavigator,
     navigationOptions: {
       drawerLabel: 'Acerca de',
+      drawerLockMode: 'locked-closed',
     },
   }
 });
-export default createAppContainer(DrawerNavigatorExample);
+export default createAppContainer(dnMain);

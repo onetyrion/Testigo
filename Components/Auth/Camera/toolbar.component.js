@@ -4,11 +4,12 @@ import { Camera } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-
-import styles from './styles';
+import { stylesCamera } from '../StylesAuth';
 
 const { FlashMode: CameraFlashModes, Type: CameraTypes } = Camera.Constants;
-
+/**
+ * @description Componente que renderiza la barra inferior del componente camara.
+ */
 export default ({ 
     capturing = false, 
     cameraType = CameraTypes.back, 
@@ -16,9 +17,9 @@ export default ({
     setFlashMode, setCameraType, 
     onCaptureIn, onCaptureOut, onLongCapture, onShortCapture, 
 }) => (
-    <Grid style={styles.bottomToolbar}>
+    <Grid style={stylesCamera.bottomToolbar}>
         <Row>
-            <Col style={styles.alignCenter}>
+            <Col style={stylesCamera.alignCenter}>
                 <TouchableOpacity onPress={() => setFlashMode( 
                     flashMode === CameraFlashModes.on ? CameraFlashModes.off : CameraFlashModes.on 
                 )}>
@@ -29,18 +30,18 @@ export default ({
                     />
                 </TouchableOpacity>
             </Col>
-            <Col size={2} style={styles.alignCenter}>
+            <Col size={2} style={stylesCamera.alignCenter}>
                 <TouchableWithoutFeedback
                     onPressIn={onCaptureIn}
                     onPressOut={onCaptureOut}
                     onLongPress={onLongCapture}
                     onPress={onShortCapture}>
-                    <View style={[styles.captureBtn, capturing && styles.captureBtnActive]}>
-                        {capturing && <View style={styles.captureBtnInternal} />}
+                    <View style={[stylesCamera.captureBtn, capturing && stylesCamera.captureBtnActive]}>
+                        {capturing && <View style={stylesCamera.captureBtnInternal} />}
                     </View>
                 </TouchableWithoutFeedback>
             </Col>
-            <Col style={styles.alignCenter}>
+            <Col style={stylesCamera.alignCenter}>
                 <TouchableOpacity onPress={() => setCameraType(
                     cameraType === CameraTypes.back ? CameraTypes.front : CameraTypes.back
                 )}>

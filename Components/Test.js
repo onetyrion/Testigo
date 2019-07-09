@@ -1,36 +1,27 @@
 import React from 'react';
-import { Button, Image, View } from 'react-native';
-import { ImagePicker } from 'expo';
+import LocationView from "react-native-location-view";
+import {View} from "react-native";
 
-export default class ImagePickerExample extends React.Component {
+/**
+ * @class debido a que la aplicación se encuentra en fase alpha este componente se usa para probar funciones para posteriormente agregarla en el commit final para almacenarlo en github
+ */
+export default class SelectLocationScreen extends React.Component {
   state = {
-    image: null,
+
   };
 
   render() {
-    let { image } = this.state;
-
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button
-          title="Pick an image from camera roll"
-          onPress={this._pickImage}
+    return(
+      <View style={{flex: 1}}>
+        <LocationView
+          apiKey={"AIzaSyAJKyjh4mUAuJrbKM7yosg9aCjEhZqkXeI"}
+          onLocationSelect={(values)=>{console.log(values)}}
+          initialLocation={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+          }}
         />
-        {image &&
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       </View>
     );
   }
-
-  _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: false,
-    }); 
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      this.setState({ image: result.uri });
-    }
-  };
 }

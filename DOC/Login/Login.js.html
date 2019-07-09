@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Login.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Login.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { Component } from 'react';
+import { View, Text,Image,TextInput,TouchableOpacity } from 'react-native';
+import icon from '../../assets/LogoV2.jpeg'; 
+import {KeyboardAvoidingView} from 'react-native';
+import { Font } from 'expo';
+import { stylesLogin } from './StylesNoAuth';
+import { connect} from 'react-redux';
+import LoginForm from './Forms/LoginForm';
+import { actionLOGIN } from '../../Store/ACTIONS';
+import ProfileEmailForm from '../Auth/form/ProfileEmailForm';
+import { Overlay } from 'react-native-elements';
+import { auth } from '../../Store/Services/Firebase';
+
+/**
+ * @class contiene el componente del login.
+ */
+
+class Login extends Component {
+  constructor(props) {
+    super(props),
+    this.state={fontLoaded: false,CorreoVisible:false}
+  }
+  /**
+   * @property navigationOptions indica las opciones de React Navigation
+   */
+  static navigationOptions = {
+    header:null
+  };
+  /**
+   * @property componentDidMount carga la fuente utilizada para el logo
+   */
+  async componentDidMount() {
+    await Font.loadAsync({
+      'pacifico': require('../../assets/fonts/Pacifico-Regular.ttf'),
+    });
+    this.setState({ fontLoaded: true });
+  }  
+  /**
+   * @property SignInUser redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+   */
+  SignInUser = (values) => {
+    this.props.login(values);
+  }
+  /**
+   * @property CambiarContrasena redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+   */
+  CambiarContrasena = (values) => {
+    this.props.ChangePassword(values.email);
+    this.setState({CorreoVisible: false});
+  }
+  /**
+   * @property render contiene la vista del componente.
+   */
+  render() {
+    const {navigate} = this.props.navigation;
+    const {push} = this.props.navigation;
+    return (
+      &lt;View style={stylesLogin.container}>
+        &lt;KeyboardAvoidingView style={stylesLogin.container} behavior="padding" enabled>
+          {this.state.fontLoaded ? ( &lt;Text style={stylesLogin.text}> Testigo &lt;/Text>):null}
+        &lt;Image source={icon} style={stylesLogin.img}/> 
+        &lt;LoginForm login={this.SignInUser} />
+        &lt;TouchableOpacity style={{marginTop:10}} onPress={()=>{navigate("SignUp")}}>  
+          &lt;Text style={{color: "#00B4DB",fontSize:15}}>Registrarse&lt;/Text>
+        &lt;/TouchableOpacity>
+        &lt;TouchableOpacity style={{marginTop:160}} onPress={()=>{this.setState({CorreoVisible:!this.state.CorreoVisible})}}>  
+          &lt;Text style={{color: "#808080",fontSize:13}}>Restablecer Contraseña&lt;/Text>
+        &lt;/TouchableOpacity>
+        &lt;/KeyboardAvoidingView>
+        &lt;Overlay
+        isVisible={this.state.CorreoVisible}
+        onBackdropPress={() => this.setState({ CorreoVisible: false })}
+        width="auto"
+        height="auto"
+        >
+          &lt;View style={{marginBottom: 22}}>
+          &lt;ProfileEmailForm ChangeEmail={this.CambiarContrasena}/>
+          &lt;/View>
+        &lt;/Overlay>
+      &lt;/View>
+    );
+  } 
+}
+/**}
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
+const mapStateToProps = (state) => {
+  return {
+    prop: state.prop,
+    usuario: state.reducerSesion,
+  }
+}
+/**}
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (datos) => {
+      dispatch(actionLOGIN(datos))
+    },    
+    ChangePassword:(emailAddress) => { 
+      auth.sendPasswordResetEmail(emailAddress).then(function() {
+        console.log("Email Enviado");
+        Alert.alert(
+          'Se ha enviado un correo para restablecer la contraseña...',
+       );
+      }).catch(function(error) {
+        console.log(error)
+      });
+    },  
+  }
+}
+/**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Login.html">Login</a></li></ul><h3>Global</h3><ul><li><a href="global.html#connect">connect</a></li><li><a href="global.html#mapDispatchToProps">mapDispatchToProps</a></li><li><a href="global.html#mapStateToProps">mapStateToProps</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 05 2019 20:23:51 GMT-0400 (GMT-04:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

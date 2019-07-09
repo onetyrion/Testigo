@@ -1,110 +1,178 @@
 import React, { Component } from 'react';
 import { View,Dimensions,Image,ScrollView,StyleSheet,TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Gallery from './Camera/gallery.component';
-import styles from './Camera/styles';
-import {Input,Text,Card,CheckBox,ButtonGroup, Button,Overlay} from 'react-native-elements';
-
-export default class Camera extends Component {
+//import { Ionicons } from '@expo/vector-icons';
+//import Gallery from './Camera/gallery.component';
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { stylesSendPost } from './StylesAuth';
+import { connect } from 'react-redux';
+import { blur } from 'redux-form';
+import SendPostForm from './form/SendPostForm';
+import { DocumentPicker } from 'expo';
+import LocationView from "react-native-location-view";
+import { Overlay, CheckBox, Text, Card, Input } from 'react-native-elements';
+import { actionCargarImagenPublicacion, actionSubirPublicacion } from '../../Store/ACTIONS';
+import Gallery from "./Camera/gallery.component";
+import SendPostMap from './SendPostMap';
+/**
+ * @class contiene las funciones de el envio de una denuncia 
+ */
+class SendPost extends Component {
   constructor(props) {
     super(props);
-    state = {captures: [],isVisible:true,checked:false,checked1:false,checked2:false}
+    state = {isVisibleMap:false,captures: [],MapsData:{},MapVisible:false,AudioData:{},isDateTimePickerVisible: false,TextDatetime:"Fecha",isVisible:true,chkAmbulancias:false,chkCarabineros:false,chkBomberos:false}
   }
+/**
+   * @property SendPost redirige a un método de redux.
+   * @param values contiene los valores del formulario.
+ */
+  SendPost = (values) => {
+    captures= [];
+    audio=(this.state.AudioData ? this.state.AudioData : '');
+    datetime=(this.state.TextDatetime ? this.state.TextDatetime : '');
+    if (this.state.captures[0]) {
+      this.state.captures.forEach(element => {
+        captures=[element.uri,...captures];
+      });
+    }
+    MapData=this.state.MapData;
+    values={...values,MapData:MapData,captures: captures,Audio:audio,DateTime:datetime,chkAmbulancias:this.state.chkAmbulancias,chkBomberos:this.state.chkBomberos,chkCarabineros:this.state.chkCarabineros};
+    console.log(values);
+    this.props.subirPublicacion(values);
+    const {navigate} = this.props.navigation;
+    navigate("Home");
+  };
+/**
+ *  METHOD MODAL DATATIME PICKER
+*/
+/**
+ * @property DateTimePickerShow funcion que cambia la visibilidad del componente que toma la fecha y hora
+ */
+  DateTimePickerShow = () =>{
+    this.setState({ isDateTimePickerVisible: !this.state.isDateTimePickerVisible });
+  };
+
+  hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false });
+  };
+
+  handleDatePicked = date => {
+    var dateformat= date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes();
+    this.setState({TextDatetime:dateformat});
+    this.hideDateTimePicker();
+  };
+  /**
+ * @property _pickDocument función que recoge un archivo de la galeria 
+ */
+  _pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
+    this.setState({AudioData:result});
+    console.log(result);
+  };
+  /**
+ * @property showMapPicker funcion que cambia la visibilidad del componente que toma la ubicación
+ */
+  showMapPicker = ({latitude,longitude}) =>{
+    this.setState({ isVisibleMap: !this.state.isVisibleMap,MapData:{latitude,longitude} });
+  };
+  /**
+   * Metodo nativo de react native y retorno de view
+   */
   componentWillMount = async () =>{
     const { navigation } = this.props;
-    const photo = navigation.getParam("Yeah");
+    const photo = navigation.getParam("PhotoData");
     this.setState({captures:photo});
+    this.props.cargarImagen(photo);
   }
+/**
+ * @property render contiene la vista del componente.
+ */
   render() {
     const captures = this.state.captures;
     return (
-      <View style={styless.imageContainer}>
+      <View style={stylesSendPost.imageContainer}>
+        {this.state.isVisibleMap ? <SendPostMap style={{position:'abolute'}} showMapPicker={this.showMapPicker}/> : 
+        <View>
+        <ScrollView 
+          horizontal={true}
+          style={[stylesSendPost.images]} >
+          <Gallery captures={captures}/>
+        </ScrollView>
+        <SendPostForm 
+          showMapPicker={this.showMapPicker}
+          DateTimePickerisVisible={this.DateTimePickerShow}
+          DateTimePickerText={this.state.TextDatetime}
+          photoData={this.state.captures[0]}
+          AudioData={this.state.AudioData}
+          AudioPicker={this._pickDocument}
+          SendPost={this.SendPost}
+          imagen={this.props.imagen}/>
+         <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this.handleDatePicked}
+          mode={"datetime"}
+          onCancel={this.hideDateTimePicker}
+          />
+        
         <Overlay
         isVisible={this.state.isVisible}
         onBackdropPress={() => this.setState({ isVisible: false })}
         width="auto"
         height="auto"
         >
+          <View>
           <CheckBox
-            checked={this.state.checked}
+            checked={this.state.chkAmbulancias}
             title="Ambulancias"
-            onPress={() => this.setState({checked: !this.state.checked})}
+            onPress={() => this.setState({chkAmbulancias: !this.state.chkAmbulancias})}
           />
           <CheckBox
-            checked={this.state.checked1}
+            checked={this.state.chkCarabineros}
             title="Carabineros"
-            onPress={() => this.setState({checked1: !this.state.checked1})}
+            onPress={() => this.setState({chkCarabineros: !this.state.chkCarabineros})}
           />
           <CheckBox
-            checked={this.state.checked2}
+            checked={this.state.chkBomberos}
             title="Bomberos"
-            onPress={() => this.setState({checked2: !this.state.checked2})}
+            onPress={() => this.setState({chkBomberos: !this.state.chkBomberos})}
           />
           <View style={{padding:5,flexDirection:'row'}}>
-            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: false })}} style={styless.button1}>
+            <TouchableOpacity onPress={()=>{this.setState({ isVisible: false })}} style={stylesSendPost.button1}>
               <Text style={{color:'#fff'}}>Cancelar</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{() => this.setState({ isVisible: false })}} style={styless.button1}>
+            <TouchableOpacity onPress={()=>{this.setState({ isVisible: false })}} style={stylesSendPost.button1}>
               <Text style={{color:'#fff'}}>Aceptar</Text>
-            </TouchableOpacity> 
+            </TouchableOpacity>
+            </View>
           </View>                 
         </Overlay>        
-        <Card style={styless.card}>
-          <Input
-          label={"Mensaje:"}
-          containerStyle={{marginTop:5}}
-          inputStyle={{height:120}}
-          multiline = {true}
-          maxLength = {340} />
-        </Card>
-        <ScrollView 
-          horizontal={true}
-          style={[styless.images]} >
-            <Gallery captures={captures}/>
-        </ScrollView>
-        <TouchableOpacity onPress={()=>{}} style={styless.button}>
-          <Text style={{color:'#fff'}}>Enviar</Text>
-        </TouchableOpacity>
+        </View>
+      }
       </View>
     );
   }
 }
-
-const { width: winWidth, height: winHeight } = Dimensions.get('window');
-
-const styless = StyleSheet.create({
-  imageContainer:{
-    flex:1,
-  },
-  images:{
-    flex:0.2,
-    width: winWidth,
-    height:50,
-    position: "relative",
-    marginTop: 50,
-    paddingLeft: 5,
-  },
-  card:{
-    position:'relative',
-    marginTop: 100,
-  },
-  button:{
-    alignItems:'center',
-    width:150,
-    padding:10,
-    backgroundColor: "#dc3545",
-    borderColor: "#dc3545",
-    borderRadius:10,
-    marginBottom: 250,
-    marginLeft: 110,
-  },
-  button1:{
-    alignItems:'center',
-    width:150,
-    padding:10,
-    backgroundColor: "#dc3545",
-    borderColor: "#dc3545",
-    borderRadius:10,
-    marginLeft: 5,
-  },
+/**
+ * @constant mapStateToProps transfiere de la store de redux a las propiedades del componente
+ */
+const mapStateToProps = state => ({
+  props: state,
+  imagen: state.reducerImagenPublicacion,
 });
+/**
+ * @constant mapDispatchToProps ejecuta las acciones almacenadas en la store por medio de metodos inyectados al componente
+ */
+const mapDispatchToProps = dispatch => ({
+  cargarImagen: (imagen) => {
+    dispatch(actionCargarImagenPublicacion(imagen));
+    dispatch(blur('SendPostForm', 'imagen', Date.now()));
+  },
+  subirPublicacion:(values)=>{
+    dispatch(actionSubirPublicacion(values));
+  }
+});
+/**
+ * @constant connect exporta el componente e integra los metodos
+ * @param mapDispatchToProps
+ * @param mapStateToProps
+ */
+export default connect(mapStateToProps, mapDispatchToProps)(SendPost);
