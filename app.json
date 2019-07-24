@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Testigo2",
-    "slug": "Testigo2",
+    "name": "Testigo",
+    "slug": "Testigo",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -12,7 +12,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/Background.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
