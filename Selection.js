@@ -18,11 +18,10 @@ class Selection extends Component {
         this.props.autenticacion();
     }
     render() {
-        console.log(this.props.numero[0]);
         return (
-            this.props.numero[0]  ?
+            this.props.Loading[0]  ?
             <View style={styles.container}>
-                {this.props.usuario ? <RoutesAuth /> : <RoutesNoAuths />} 
+                {this.props.Usuario ? <RoutesAuth /> : <RoutesNoAuths />} 
             </View>
             :<View style={stylesHome.container}><ActivityIndicator size="large" color="#dc3545" /></View>
         );
@@ -35,33 +34,31 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 });
-
+/**
+ * Loading: pone una pantalla de carga mientras busca una session en el dispositivo
+ *  Usuario: carga datos del usuario en caso de que exista una session
+ */
 const mapStateToProps = (state) => {
     return {
-        numero: state.reducerPrueba,
+        Loading: state.reducerLoading,
         prop: state.prop,
-        usuario: state.reducerSesion,
+        Usuario: state.reducerSesion,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
         autenticacion: () => {
             // dispatch(actionCreator)
-            auth.onAuthStateChanged(function(usuario) {
-                if (usuario) {
-                    console.log(usuario);
-                  dispatch(actionEstablecerSesion(usuario));
+            auth.onAuthStateChanged(function(Usuario) {
+                if (Usuario) {
+                  dispatch(actionEstablecerSesion(Usuario));
                   dispatch(actionLoading(true));
                 } else {
                     console.log('no existe sesión');
-                    dispatch(actionCerrarSesion(usuario));
+                    dispatch(actionCerrarSesion(Usuario));
                     dispatch(actionLoading(true));
                 }
               });
-        },
-        verificarEmail: () => {
-            user = auth.currentUser;
-            user.sendEmailVerification();
         }
     }
 }
