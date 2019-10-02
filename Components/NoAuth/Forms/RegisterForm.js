@@ -97,11 +97,10 @@ const validate =(values)=>{
  * @param {*} props 
  */
 const SignUpForms = (props)=>{
-    //console.log(props);
     return(
         <View>
             <Field name="rut" component={fieldNombre} pc='RUT'/>
-            <Field name="ndoc" component={fieldPopUp} pc='N° de documento'/>
+            <Field name="ndoc" component={fieldPopUp} pressModal={props.pressModal} pc='N° de documento'/>
             <Field name="password" component={fieldNombre} pc='Contraseña'/>
             <Field name="confirmacion" component={fieldNombre} pc='Repita su contraseña'/>
             <Field name="correo" component={fieldNombre} pc='Email'/>

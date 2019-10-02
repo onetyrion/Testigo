@@ -1,11 +1,12 @@
 import React from 'react';
-import { View,Image,ScrollView,TouchableOpacity, Text } from 'react-native';
-import { Camera, Permissions,ImagePicker } from 'expo';
+import { View,ScrollView,TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { Camera } from 'expo-camera';
+import * as Permissions from 'expo-permissions'
 import { stylesCamera } from '../StylesAuth';
 import Toolbar from './toolbar.component';
 import Gallery from './gallery.component';
+import * as ImagePicker from 'expo-image-picker';
 /**
  * @class componente que contiene la camara, y la exploración de galeria, se usa para obtener el contenido audiovisual.
  */

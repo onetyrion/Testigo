@@ -1,12 +1,15 @@
 import React from "react"; 
 import { StyleSheet,ActivityIndicator, Text, View, Image } from "react-native"; 
-import { Constants, Location, Permissions,MapView  } from "expo"; 
+import { Constants, Location  } from "expo"; 
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { stylesHome } from "./StylesAuth";
 import { database } from "../../Store/Services/Firebase";
 import { connect} from 'react-redux';
 import { actionAnadirMarkers } from "../../Store/ACTIONS";
+import MapView from 'react-native-maps';
+import * as Permissions from 'expo-permissions'
+
 /**
  * @class Crea componente Home, Contiene vista del mapa, botón a camara, barra lateral.
  */
@@ -80,15 +83,18 @@ class Home extends React.Component {
                 >
                     {this.props.markers.length === 5 ? 
                     this.props.markers.map(( values ) => {
-                        const lat = Object.values(values)[0].children_.root_.right.value.children_.root_.left.value.value_;
-                        const long = Object.values(values)[0].children_.root_.right.value.children_.root_.value.value_;
+                        const lat = Object.values(values)[0].children_.root_.right.left.value.children_.root_.left.value.value_;
+                        const long = Object.values(values)[0].children_.root_.right.left.value.children_.root_.value.value_;
                         return(<MapView.Marker key={lat+""+long} coordinate={{latitude: lat,longitude:long}}
-                        />)
+                    />)
                     })
                     : null 
-
+                    
                     }
                 </MapView>
+                <ActionButton buttonColor="#dc3545" position={"left"} onPress={()=>{navigate('Comunity_StackNavigator')}}
+                renderIcon={()=>{return <Icon name="md-contacts" style={stylesHome.actionButtonIcon}/>}}>
+                </ActionButton>
                 <ActionButton buttonColor="#dc3545" onPress={()=>{navigate('Camera')}}
                 renderIcon={()=>{return <Icon name="md-camera" style={stylesHome.actionButtonIcon}/>}}>
                 </ActionButton>

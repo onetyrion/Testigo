@@ -89,7 +89,6 @@ class Login extends Component {
 const mapStateToProps = (state) => {
   return {
     prop: state.prop,
-    usuario: state.reducerSesion,
   }
 }
 /**
@@ -101,7 +100,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actionLOGIN(datos))
     },    
     ChangePassword:(emailAddress) => { 
-      auth.sendPasswordResetEmail(emailAddress).then(function() {
+      auth.sendPasswordResetEmail(emailAddress)
+       .then(function() {
         console.log("Email Enviado");
         Alert.alert(
           'Se ha enviado un correo para restablecer la contraseña...',

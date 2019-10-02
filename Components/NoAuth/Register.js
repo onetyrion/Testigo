@@ -5,7 +5,7 @@ import Carnet from '../../assets/carnet2.jpeg';
 import { stylesRegister } from './StylesNoAuth';
 import { connect} from 'react-redux';
 import RegisterForm from './Forms/RegisterForm';
-import { actionREGISTER } from '../../Store/ACTIONS';
+import { actionREGISTER, actionVALIDAR } from '../../Store/ACTIONS';
 
 /**
  * @class contiene el componente
@@ -14,20 +14,21 @@ import { actionREGISTER } from '../../Store/ACTIONS';
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = {checked:true,modalVisible:false,isready:false}
+    this.state = {checked:true,modalVisible:false,isready:false,loading:false}
   }
   /** 
    * @property SignInUser redirige a un método de redux.
    * @param values contiene los valores del formulario.
    */
   registroUsuario = (values) => {
-    this.props.registro(values)
+    this.props.registro(values);
   };
   /**
    * @property cambia el valor de los check
    */
   onpressChk = () =>{
     this.setState({checked:!this.state.checked});
+    this.props.validar();
   }
   /** @property cambia el estado de la visibilidad del componente  */
   setModalVisible=()=> {
@@ -84,33 +85,6 @@ class Register extends Component {
             navigate={navigate}
             goBack={goBack}
             pressModal={this.setModalVisible}/>
-        {/* <TextInput placeholder="RUT" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput1}/>
-        <View style={{flexDirection: "row", backgroundColor:'#f0f0f0',padding:3,marginTop:20,borderRadius:5}}>
-        <TextInput placeholder="N° de documento" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput2}/>
-          <Icon name='search' 
-            type='font-awesome' 
-            containerStyle={{marginTop:3,paddingLeft:10,marginRight:7}}
-            underlayColor="#b0b0b0"
-            onPress={()=>{this.setModalVisible(true);}}/> 
-        </View>
-        <TextInput placeholder="Contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
-        <TextInput placeholder="Repita su contraseña" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
-        <TextInput placeholder="Email" placeholderTextColor="#b0b0b0" maxLength={12} style={stylesRegister.textInput}/>
-        <CheckBox
-          title='Aceptar los terminos y condiciones (Manten para ver más)' 
-          checked={this.state.checked}
-          onPress={() => this.setState({checked: !this.state.checked})}
-          onLongPress={() => {navigate('TyC')}}
-          containerStyle={stylesRegister.CheckBox}
-        />
-        <View style={{flexDirection:"row"}}>
-          <TouchableOpacity style={stylesRegister.button} onPress={() => {goBack()}}>
-            <Text style={{color: "#fff",fontSize:15}}>Cancelar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={stylesRegister.button}>
-            <Text style={{color: "#fff",fontSize:15}}>Aceptar</Text>
-          </TouchableOpacity>
-        </View> */}
         </KeyboardAvoidingView>
       </View>
       : <View style={stylesRegister.container}><ActivityIndicator size="large" color="#dc3545" /></View>
@@ -131,6 +105,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   registro: (values) => {
     dispatch(actionREGISTER(values));
+  },
+  validar: (values) => {
+    dispatch(actionVALIDAR(values));
   }
 })
 

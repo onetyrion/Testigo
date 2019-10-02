@@ -7,9 +7,8 @@ import { stylesSendPost } from './StylesAuth';
 import { connect } from 'react-redux';
 import { blur } from 'redux-form';
 import SendPostForm from './form/SendPostForm';
-import { DocumentPicker } from 'expo';
-import LocationView from "react-native-location-view";
-import { Overlay, CheckBox, Text, Card, Input } from 'react-native-elements';
+import * as DocumentPicker from 'expo-document-picker';
+import { Overlay, CheckBox, Text } from 'react-native-elements';
 import { actionCargarImagenPublicacion, actionSubirPublicacion } from '../../Store/ACTIONS';
 import Gallery from "./Camera/gallery.component";
 import SendPostMap from './SendPostMap';
@@ -120,7 +119,6 @@ class SendPost extends Component {
         
         <Overlay
         isVisible={this.state.isVisible}
-        onBackdropPress={() => this.setState({ isVisible: false })}
         width="auto"
         height="auto"
         >
@@ -141,7 +139,7 @@ class SendPost extends Component {
             onPress={() => this.setState({chkBomberos: !this.state.chkBomberos})}
           />
           <View style={{padding:5,flexDirection:'row'}}>
-            <TouchableOpacity onPress={()=>{this.setState({ isVisible: false })}} style={stylesSendPost.button1}>
+            <TouchableOpacity onPress={()=>{this.props.navigation.goBack()}} style={stylesSendPost.button1}>
               <Text style={{color:'#fff'}}>Cancelar</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>{this.setState({ isVisible: false })}} style={stylesSendPost.button1}>

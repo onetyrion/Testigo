@@ -40,11 +40,11 @@ export const actionCambiarEmail = values => ({
     type: CONSTANTS.CAMBIAR_EMAIL,
     values,
 });
-export const actionObtenerPerfil = values => ({
-    type: CONSTANTS.Obtener_Perfil,
-    values,
-});
 export const actionContacto = values => ({
     type: CONSTANTS.ENVIAR_CONTACTO,
+    values,
+});
+export const actionVALIDAR = values => ({
+    type: CONSTANTS.VALIDAR_CEDULA,
     values,
 });
