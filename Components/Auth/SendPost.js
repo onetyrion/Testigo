@@ -125,17 +125,17 @@ class SendPost extends Component {
           <View>
           <CheckBox
             checked={this.state.chkAmbulancias}
-            title="Ambulancias"
+            title="Organización 1"
             onPress={() => this.setState({chkAmbulancias: !this.state.chkAmbulancias})}
           />
           <CheckBox
             checked={this.state.chkCarabineros}
-            title="Carabineros"
+            title="Organización 2"
             onPress={() => this.setState({chkCarabineros: !this.state.chkCarabineros})}
           />
           <CheckBox
             checked={this.state.chkBomberos}
-            title="Bomberos"
+            title="Organización 3"
             onPress={() => this.setState({chkBomberos: !this.state.chkBomberos})}
           />
           <View style={{padding:5,flexDirection:'row'}}>
